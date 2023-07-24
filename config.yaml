@@ -14,9 +14,15 @@ arch:
 init: false
 homeassistant_api: true
 ingress: true
-ingress_port: 8099 # default
+ingress_port: 8099 # default, admin dashboard
 map:
   - share:rw
+ports:
+  1337/tcp: 1337 # public interface
+options:
+  public_token_url: https://ots.example.org
+schema:
+  public_token_url: str
 
 panel_icon: mdi:ticket-confirmation
 #panel_admin: true

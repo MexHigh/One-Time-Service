@@ -1,0 +1,7 @@
+:1337 {
+  respond "Outside"
+}
+
+:8099 {
+  respond "Inside"
+}
