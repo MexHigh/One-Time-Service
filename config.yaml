@@ -11,6 +11,7 @@ arch:
   - armv7
   - i386
 
+init: false
 homeassistant_api: true
 ingress: true
 ingress_port: 8099 # default
@@ -19,5 +20,3 @@ map:
 
 panel_icon: mdi:ticket-confirmation
 #panel_admin: true
-
-#init: false # don't know what this does
