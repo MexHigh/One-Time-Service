@@ -19,14 +19,8 @@ ports:
 
 options:
   public_token_url: null
-  makros: []
 schema:
-  public_token_url: "url"
-  makros:
-    - name: "str(,50)"
-      do:
-        - service: "str"
-          data:
+  public_token_url: "str"
 
 panel_icon: mdi:ticket-confirmation
 #panel_admin: true

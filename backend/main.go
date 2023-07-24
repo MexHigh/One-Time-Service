@@ -1,13 +1,23 @@
 package main
 
 import (
-	"net/http"
+	"flag"
 
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	dbPath *string = flag.String("db", "./db.json", "Path to database JSON file")
+
+	db *DB
+)
+
 func main() {
+	flag.Parse()
+
+	db = NewDB(*dbPath)
+
 	/// INTERNAL ROUTER ///
 	internalRouter := gin.Default()
 
@@ -15,11 +25,7 @@ func main() {
 	internalRouter.Use(static.Serve("/", static.LocalFile("../frontend-internal", true)))
 
 	// internal routes
-	internalRouter.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong (admin)",
-		})
-	})
+	internalRouter.GET("/")
 
 	go internalRouter.Run(":8099")
 
@@ -30,11 +36,7 @@ func main() {
 	publicRouter.Use(static.Serve("/", static.LocalFile("../frontend-public", true)))
 
 	// public routes
-	publicRouter.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
+	publicRouter.POST("/submit", handleCodeSubmit)
 
 	go publicRouter.Run(":1337")
 
