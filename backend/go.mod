@@ -1,4 +1,4 @@
-module git.leon.wtf/leon/one-time-service/backend
+module git.leon.wtf/leon/one-time-event/backend
 
 go 1.18
 

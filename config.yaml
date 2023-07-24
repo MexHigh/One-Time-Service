@@ -1,12 +1,12 @@
-name: "One Time Service"
-description: "Call a service with a one time token from outside Home Assistant!"
-slug: "one-time-service"
+name: "One Time Event"
+description: "Fire an event with a one time token from outside Home Assistant!"
+slug: "one-time-event"
 version: "0.1.0"
 stage: experimental
-url: https://git.leon.wtf/leon/one-time-service
+url: https://git.leon.wtf/leon/one-time-event
 arch:
   - amd64
-image: registry.git.leon.wtf/leon/one-time-service/{arch}
+image: registry.git.leon.wtf/leon/one-time-event/{arch}
 
 init: false
 homeassistant_api: true
@@ -19,7 +19,7 @@ ports:
 
 options:
   public_token_url: null
-  makros: null
+  makros: []
 schema:
   public_token_url: "url"
   makros:

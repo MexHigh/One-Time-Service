@@ -1,3 +1,6 @@
 #!/bin/sh
 
-docker build -t registry.git.leon.wtf/leon/one-time-service/amd64:latest . && docker push registry.git.leon.wtf/leon/one-time-service/amd64:latest
+VERSION="0.1.0"
+IMAGE_URL="registry.git.leon.wtf/leon/one-time-event/amd64"
+
+docker build -t $IMAGE_URL:$VERSION . && docker push $IMAGE_URL:$VERSION
