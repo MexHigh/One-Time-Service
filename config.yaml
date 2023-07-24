@@ -1,0 +1,23 @@
+name: "One Time Service"
+description: "Call a service with a one time token from outside Home Assistant!"
+version: "0.1.0"
+stage: experimental
+slug: "one-time-service"
+url: https://git.leon.wtf/leon/one-time-service
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+
+homeassistant_api: true
+ingress: true
+ingress_port: 8099 # default
+map:
+  - share:rw
+
+panel_icon: mdi:ticket-confirmation
+#panel_admin: true
+
+#init: false # don't know what this does
