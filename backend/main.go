@@ -8,24 +8,28 @@ import (
 )
 
 var (
-	dbPath *string = flag.String("db", "./db.json", "Path to database JSON file")
+	dbPath               *string = flag.String("db", "./db.json", "Path to database JSON file")
+	internalFrontendPath *string = flag.String("internal-frontend-path", "../frontend-internal", "Base path to static internal frontend files")
+	publicFrontendPath   *string = flag.String("public-frontend-path", "../frontend-public", "Base path to static public frontend files")
+	hassApiUrl           *string = flag.String("hass-api-url", "http://supervisor/core/api", "Custom base URL for Hass API")
 
 	db *DB
 )
 
 func main() {
 	flag.Parse()
-
 	db = NewDB(*dbPath)
 
 	/// INTERNAL ROUTER ///
 	internalRouter := gin.Default()
 
-	// serve internal frontend
-	internalRouter.Use(static.Serve("/", static.LocalFile("../frontend-internal", true)))
+	// frontend route
+	internalRouter.Use(static.Serve("/", static.LocalFile(*internalFrontendPath, true)))
 
-	// internal routes
-	internalRouter.GET("/")
+	// api routes
+	internalRouterApi := internalRouter.Group("/api/internal")
+	internalRouterApi.GET("/token/details", getTokenDetails)
+	// TODO
 
 	go internalRouter.Run(":8099")
 
@@ -33,10 +37,12 @@ func main() {
 	publicRouter := gin.Default()
 
 	// serve public frontend
-	publicRouter.Use(static.Serve("/", static.LocalFile("../frontend-public", true)))
+	publicRouter.Use(static.Serve("/", static.LocalFile(*publicFrontendPath, true)))
 
 	// public routes
-	publicRouter.POST("/submit", handleCodeSubmit)
+	publicRouterApi := publicRouter.Group("/api/public")
+	publicRouterApi.GET("/token/details", getTokenDetails)
+	publicRouterApi.POST("/token/submit", handleCodeSubmit)
 
 	go publicRouter.Run(":1337")
 
