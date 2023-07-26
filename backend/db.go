@@ -97,7 +97,7 @@ type DBContent struct {
 
 type ServiceCall struct {
 	Service string      `json:"service"`
-	Data    interface{} `json:"data,omitempty"`
+	Data    interface{} `json:"data"`
 }
 
 type TokenDetails struct {

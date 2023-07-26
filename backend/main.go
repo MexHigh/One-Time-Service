@@ -33,8 +33,13 @@ func main() {
 		internalRouterApi.Use(corsAllowAll())
 	}
 	internalRouterApi.GET("/ping", handlePing)
-	internalRouterApi.GET("/token/details", getTokenDetails)
-	// TODO
+	internalRouterApi.GET("/macros", handleGetMacros)
+	internalRouterApi.GET("/macro/details", handleGetMacro)
+	internalRouterApi.POST("/macro", handleCreateMacro)
+	internalRouterApi.DELETE("/macro", handleDeleteMacro)
+	internalRouterApi.GET("/token/details", getTokenDetails) // generic route implementation
+	internalRouterApi.POST("/token", handleCreateToken)
+	internalRouterApi.DELETE("/token", handleDeleteToken)
 
 	go internalRouter.Run(":8099")
 
@@ -50,7 +55,7 @@ func main() {
 		publicRouterApi.Use(corsAllowAll())
 	}
 	publicRouterApi.GET("/ping", handlePing)
-	publicRouterApi.GET("/token/details", getTokenDetails)
+	publicRouterApi.GET("/token/details", getTokenDetails) // generic route implementation
 	publicRouterApi.POST("/token/submit", handleCodeSubmit)
 
 	go publicRouter.Run(":1337")
