@@ -6,6 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func handlePing(c *gin.Context) {
+	c.JSON(http.StatusOK, GenericResponse{
+		Response: "pong",
+	})
+}
+
 func getTokenDetails(c *gin.Context) {
 	tokenParam := c.Query("token")
 	if tokenParam == "" {

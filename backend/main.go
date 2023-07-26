@@ -28,6 +28,7 @@ func main() {
 
 	// api routes
 	internalRouterApi := internalRouter.Group("/api/internal")
+	internalRouterApi.GET("/ping", handlePing)
 	internalRouterApi.GET("/token/details", getTokenDetails)
 	// TODO
 
@@ -41,6 +42,7 @@ func main() {
 
 	// public routes
 	publicRouterApi := publicRouter.Group("/api/public")
+	publicRouterApi.GET("/ping", handlePing)
 	publicRouterApi.GET("/token/details", getTokenDetails)
 	publicRouterApi.POST("/token/submit", handleCodeSubmit)
 
