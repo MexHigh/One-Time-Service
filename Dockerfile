@@ -17,4 +17,4 @@ LABEL \
   io.hass.type="addon" \
   io.hass.arch="amd64"
 
-CMD [ "/app/backend" ]
+CMD [ "/app/backend", "-db", "/share/one-time-service/db.json" ]
