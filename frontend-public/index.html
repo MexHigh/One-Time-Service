@@ -9,8 +9,55 @@
 </head>
 <body>
     <main class="container">
-        <progress></progress>
-        <p id="test"></p>
+        <h1>One Time Service</h1>
+
+        <article id="loading-card">
+            <progress></progress>
+        </article>
+
+        <article id="enter-token-card" hidden>
+            <div>
+                <input type="text" placeholder="Token"/>
+            </div>
+            <footer>
+                <button>Check token</button>
+            </footer>
+        </article>
+
+        <article id="token-invalid-card" hidden>
+            <p>The token you entered is invalid</p>
+            <footer>
+                <button>Enter a new token</button>
+            </footer>
+        </article>
+        
+        <article id="details-card" hidden>
+            <div>
+                <p id="action-container">
+                    <strong>Action: </strong>
+                    <code></code>
+                </p>
+                <p id="comment-container" hidden>
+                    <strong>Comment: </strong>
+                    <code></code>
+                </p>
+                <p id="expires-container" hidden>
+                    <strong>Expiry: </strong>
+                    <code></code>
+                </p>
+            </div>
+            <footer>
+                <p>Warning: Calling the service will invalidate the token for futher usage!</p>
+                <button>Call service</button>
+            </footer>
+        </article>
+
+        <article id="result-card" hidden>
+            <p></p>
+            <footer>
+                <button>Reload page</button>
+            </footer>
+        </article>
     </main>
 </body>
 </html>

@@ -12,6 +12,7 @@ var (
 	internalFrontendPath *string = flag.String("internal-frontend-path", "../frontend-internal", "Base path to static internal frontend files")
 	publicFrontendPath   *string = flag.String("public-frontend-path", "../frontend-public", "Base path to static public frontend files")
 	hassApiUrl           *string = flag.String("hass-api-url", "http://supervisor/core/api", "Custom base URL for Hass API")
+	corsAllowDebug       *bool   = flag.Bool("cors-allow-all", false, "Allows all CORS request (for testing only!)")
 
 	db *DB
 )
@@ -28,6 +29,9 @@ func main() {
 
 	// api routes
 	internalRouterApi := internalRouter.Group("/api/internal")
+	if *corsAllowDebug {
+		internalRouterApi.Use(corsAllowAll())
+	}
 	internalRouterApi.GET("/ping", handlePing)
 	internalRouterApi.GET("/token/details", getTokenDetails)
 	// TODO
@@ -42,6 +46,9 @@ func main() {
 
 	// public routes
 	publicRouterApi := publicRouter.Group("/api/public")
+	if *corsAllowDebug {
+		publicRouterApi.Use(corsAllowAll())
+	}
 	publicRouterApi.GET("/ping", handlePing)
 	publicRouterApi.GET("/token/details", getTokenDetails)
 	publicRouterApi.POST("/token/submit", handleCodeSubmit)
