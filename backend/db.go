@@ -107,6 +107,16 @@ type TokenDetails struct {
 	Comment   *string    `json:"comment"`
 }
 
+func (db *DB) GetMacroNames() (out []string, err error) {
+	err = db.claim(false, func(dbc *DBContent) error {
+		for name := range dbc.Macros {
+			out = append(out, name)
+		}
+		return nil
+	})
+	return
+}
+
 func (db *DB) GetMacro(name string) (sc *ServiceCall, err error) {
 	err = db.claim(false, func(dbc *DBContent) error {
 		scTemp, ok := dbc.Macros[name]
@@ -114,16 +124,6 @@ func (db *DB) GetMacro(name string) (sc *ServiceCall, err error) {
 			return fmt.Errorf("macro '%s' does not exist", name)
 		}
 		sc = scTemp
-		return nil
-	})
-	return
-}
-
-func (db *DB) GetMacroNames() (out []string, err error) {
-	err = db.claim(false, func(dbc *DBContent) error {
-		for name := range dbc.Macros {
-			out = append(out, name)
-		}
 		return nil
 	})
 	return
@@ -145,6 +145,16 @@ func (db *DB) DeleteMacro(name string) (err error) {
 	return
 }
 
+func (db *DB) GetTokenNames() (tokenNames []string, err error) {
+	err = db.claim(false, func(dbc *DBContent) error {
+		for name, _ := range dbc.Tokens {
+			tokenNames = append(tokenNames, name)
+		}
+		return nil
+	})
+	return
+}
+
 func (db *DB) GetTokenDetails(token string) (td *TokenDetails, err error) {
 	err = db.claim(false, func(dbc *DBContent) error {
 		tdTemp, ok := dbc.Tokens[token]
@@ -152,14 +162,6 @@ func (db *DB) GetTokenDetails(token string) (td *TokenDetails, err error) {
 			return fmt.Errorf("token '%s' does not exist", token)
 		}
 		td = tdTemp
-		return nil
-	})
-	return
-}
-
-func (db *DB) GetTokens() (tokens map[string]*TokenDetails, err error) {
-	err = db.claim(false, func(dbc *DBContent) error {
-		tokens = dbc.Tokens
 		return nil
 	})
 	return

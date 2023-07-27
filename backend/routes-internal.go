@@ -166,6 +166,20 @@ func handleDeleteMacro(c *gin.Context) {
 	})
 }
 
+func handleGetTokens(c *gin.Context) {
+	tokens, err := db.GetTokenNames()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, GenericResponse{
+			Error: err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, GenericResponse{
+		Response: tokens,
+	})
+}
+
 func handleCreateToken(c *gin.Context) {
 	bytes, err := io.ReadAll(c.Request.Body)
 	if err != nil {

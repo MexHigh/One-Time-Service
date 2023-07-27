@@ -37,6 +37,7 @@ func main() {
 	internalRouterApi.GET("/macro/details", handleGetMacro)
 	internalRouterApi.POST("/macro", handleCreateMacro)
 	internalRouterApi.DELETE("/macro", handleDeleteMacro)
+	internalRouterApi.GET("/tokens", handleGetTokens)
 	internalRouterApi.GET("/token/details", getTokenDetails) // generic route implementation
 	internalRouterApi.POST("/token", handleCreateToken)
 	internalRouterApi.DELETE("/token", handleDeleteToken)
