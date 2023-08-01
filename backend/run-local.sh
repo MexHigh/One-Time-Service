@@ -12,4 +12,4 @@
 api_url="$1"
 long_lived_token="$2"
 
-SUPERVISOR_TOKEN=$long_lived_token go run . -hass-api-url=$api_url -cors-allow-all
+SUPERVISOR_TOKEN=$long_lived_token go run . -hass-api-url=$api_url -cors-allow-all -mock-options-json

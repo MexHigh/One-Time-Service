@@ -13,6 +13,7 @@ var (
 	publicFrontendPath   *string = flag.String("public-frontend-path", "../frontend-public", "Base path to static public frontend files")
 	hassApiUrl           *string = flag.String("hass-api-url", "http://supervisor/core/api", "Custom base URL for Hass API")
 	corsAllowDebug       *bool   = flag.Bool("cors-allow-all", false, "Allows all CORS request (for testing only!)")
+	mockOptionsJson      *bool   = flag.Bool("mock-options-json", false, "Does not read from /data/options.json (for testing only!)")
 
 	db *DB
 )
@@ -41,6 +42,7 @@ func main() {
 	internalRouterApi.GET("/token/details", getTokenDetails) // generic route implementation
 	internalRouterApi.POST("/token", handleCreateToken)
 	internalRouterApi.DELETE("/token", handleDeleteToken)
+	internalRouterApi.GET("/token/share-url", handleGetShareUrl)
 
 	go internalRouter.Run(":8099")
 

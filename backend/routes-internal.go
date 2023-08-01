@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -251,5 +252,61 @@ func handleDeleteToken(c *gin.Context) {
 
 	c.JSON(http.StatusOK, GenericResponse{
 		Response: "Deleted",
+	})
+}
+
+func handleGetShareUrl(c *gin.Context) {
+	tokenParam := c.Query("token")
+	if tokenParam == "" {
+		c.JSON(http.StatusBadRequest, GenericResponse{
+			Error: "token parameter is empty",
+		})
+		return
+	}
+
+	_, err := db.GetTokenDetails(tokenParam)
+	if err != nil {
+		c.JSON(http.StatusNotFound, GenericResponse{
+			Error: err.Error(),
+		})
+		return
+	}
+
+	if *mockOptionsJson {
+		c.JSON(http.StatusOK, GenericResponse{
+			Response: "http://test-url/" + "?token=" + tokenParam,
+		})
+		return
+	}
+
+	file, err := os.Open("/data/options.json")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, GenericResponse{
+			Error: err.Error(),
+		})
+		return
+	}
+	defer file.Close()
+
+	bytes, err := io.ReadAll(file)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, GenericResponse{
+			Error: err.Error(),
+		})
+		return
+	}
+
+	var options struct {
+		BaseURL string `json:"public_token_base_url"`
+	}
+	if err := json.Unmarshal(bytes, &options); err != nil {
+		c.JSON(http.StatusInternalServerError, GenericResponse{
+			Error: err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, GenericResponse{
+		Response: options.BaseURL + "?token=" + tokenParam,
 	})
 }
