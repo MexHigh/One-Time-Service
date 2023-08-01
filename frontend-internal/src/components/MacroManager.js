@@ -2,18 +2,8 @@ import React, { useEffect, useState } from "react"
 import MacroAdder from "./MacroAdder"
 import MacroModal from "./MacroModal"
 
-export default function MacroManager() {
-    const [ macros, setMacros ] = useState(null)
+export default function MacroManager({ macros }) {
     const [ modal, setModal ] = useState(null)
-    
-    useEffect(() => {
-        fetch("/api/internal/macros")
-            .then(r => r.json())
-            .then(r => {
-                setMacros(r.response)
-            })
-            .catch(console.error)
-    }, [])
 
     return (
         <>
@@ -26,23 +16,25 @@ export default function MacroManager() {
                 </header>
                 <div>
                     <MacroAdder />
-                    <h5>Macro List</h5>
-                    <ul>
+                    <div>
                         { macros && macros.map(macro => (
-                            <li key={ macro }>
-                                <a 
-                                    onClick={e => {
-                                        e.preventDefault()
-                                        setModal(macro)
-                                    }}
-                                >{ macro }</a>
-                            </li>
+                            <a
+                                key={macro}
+                                role="button"
+                                href=""
+                                className="outline"
+                                style={{
+                                    marginRight: "20px",
+                                    marginBottom: "20px"
+                                }}
+                                onClick={e => {
+                                    e.preventDefault()
+                                    setModal(macro)
+                                }}
+                            >{ macro }</a>
                         ))}
-                    </ul>
+                    </div>
                 </div>
-                <footer>
-                    
-                </footer>
             </article>
             <MacroModal
                 open={modal ? true : false}

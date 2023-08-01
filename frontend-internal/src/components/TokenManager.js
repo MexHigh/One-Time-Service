@@ -1,19 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faClipboard } from "@fortawesome/free-regular-svg-icons"
+import TokenAdder from "./TokenAdder"
 
-export default function TokenManager() {
-    const [ tokens, setTokens ] = useState(null)
-    
-    useEffect(() => {
-        fetch(`api/internal/tokens`)
-            .then(r => r.json())
-            .then(r => {
-                setTokens(r.response)
-            })
-            .catch(console.error)
-    }, [])
-
+export default function TokenManager({ macros, tokens }) {
     return (
         <article>
             <header>
@@ -23,7 +13,7 @@ export default function TokenManager() {
                 >Tokens</span>
             </header>
             <div>
-                <h5>Token list</h5>
+                <TokenAdder macros={macros} />
                 <ul>
                     { tokens && tokens.map(token => (
                         <li key="token">

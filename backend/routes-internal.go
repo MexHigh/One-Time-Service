@@ -191,8 +191,8 @@ func handleCreateToken(c *gin.Context) {
 
 	var body struct {
 		MacroName string     `json:"macro_name"`
-		Expires   *time.Time `json:"expires"`
-		Comment   *string    `json:"comment"`
+		Expires   *time.Time `json:"expires,omitempty"`
+		Comment   *string    `json:"comment,omitempty"`
 	}
 	if err := json.Unmarshal(bytes, &body); err != nil {
 		c.JSON(http.StatusBadRequest, GenericResponse{
@@ -205,17 +205,17 @@ func handleCreateToken(c *gin.Context) {
 
 	now := time.Now()
 
-	var expires time.Time
+	var expires *time.Time
 	if body.Expires != nil {
-		expires = *body.Expires
+		expires = body.Expires
 	} else {
-		expires = time.Now()
+		expires = nil
 	}
 
 	sc := &TokenDetails{
 		MacroName: body.MacroName,
 		Created:   &now,
-		Expires:   &expires,
+		Expires:   expires,      // might be nil, but thats intended
 		Comment:   body.Comment, // might be nil, but thats intended
 	}
 

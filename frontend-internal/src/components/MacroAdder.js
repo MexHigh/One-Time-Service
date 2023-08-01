@@ -32,23 +32,30 @@ export default function MacroAdder() {
 
     return (
         <details>
-            <summary role="button" className="secondary">Add a Macro</summary>
+            <summary role="button" className="secondary">Add a new Macro</summary>
             <form>
-                <input 
-                    type="text" 
-                    placeholder="Name"
-                    value={name}
-                    onChange={event => setName(event.target.value)}
-                />
+                <label>
+                    Macro name
+                    <input 
+                        type="text" 
+                        placeholder="E.g. 'Open front door'"
+                        value={name}
+                        onChange={event => setName(event.target.value)}
+                    />
+                </label>
 
-                <a href="/developer-tools/service">Create YAML definition here</a>
-                <textarea 
-                    type="text" 
-                    rows="7"
-                    placeholder="YAML definition for service call"
-                    value={yaml}
-                    onChange={event => setYaml(event.target.value)} 
-                />
+                <label>
+                    <span>
+                        Service call definition in YAML <i>(<a href="/developer-tools/service">create one here</a>)</i>
+                    </span>
+                    <textarea 
+                        type="text" 
+                        rows="7"
+                        placeholder="service: homeassistant.restart&#10;data: {}"
+                        value={yaml}
+                        onChange={event => setYaml(event.target.value)} 
+                    />
+                </label>
                 
                 <button 
                     type="submit"
