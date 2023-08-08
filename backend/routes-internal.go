@@ -50,19 +50,11 @@ func handleGetMacro(c *gin.Context) {
 }
 
 func handleCreateMacro(c *gin.Context) {
-	bytes, err := io.ReadAll(c.Request.Body)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, GenericResponse{
-			Error: err.Error(),
-		})
-		return
-	}
-
 	var body struct {
-		Name                  string `json:"name"`
-		ServicePayloadYAMLb64 string `json:"service_payload_yaml_base64"`
+		Name                  string `json:"name" binding:"required"`
+		ServicePayloadYAMLb64 string `json:"service_payload_yaml_base64" binding:"required"`
 	}
-	if err := json.Unmarshal(bytes, &body); err != nil {
+	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, GenericResponse{
 			Error: err.Error(),
 		})
@@ -198,20 +190,12 @@ func handleGetTokens(c *gin.Context) {
 }
 
 func handleCreateToken(c *gin.Context) {
-	bytes, err := io.ReadAll(c.Request.Body)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, GenericResponse{
-			Error: err.Error(),
-		})
-		return
-	}
-
 	var body struct {
-		MacroName string     `json:"macro_name"`
+		MacroName string     `json:"macro_name" binding:"required"`
 		Expires   *time.Time `json:"expires,omitempty"`
 		Comment   *string    `json:"comment,omitempty"`
 	}
-	if err := json.Unmarshal(bytes, &body); err != nil {
+	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, GenericResponse{
 			Error: err.Error(),
 		})
