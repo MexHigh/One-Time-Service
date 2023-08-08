@@ -12,7 +12,7 @@ export default function MacroAdder() {
             return false
         }
 
-        fetch("/api/internal/macro", {
+        fetch("api/internal/macro", {
             method: "POST",
             headers: {
                 "content-type": "application/json"
@@ -46,7 +46,7 @@ export default function MacroAdder() {
 
                 <label>
                     <span>
-                        Service call definition in YAML <i>(<a href="/developer-tools/service">create one here</a>)</i>
+                        Service call definition in YAML <i>(<a href="/developer-tools/service" target="_blank">create one here</a>)</i>
                     </span>
                     <textarea 
                         type="text" 

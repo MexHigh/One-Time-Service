@@ -31,7 +31,7 @@ export default function TokenAdder({ macros }) {
             "comment": parsedComment
         }
         
-        fetch("/api/internal/token", {
+        fetch("api/internal/token", {
             method: "POST",
             headers: {
                 "content-type": "application/json"

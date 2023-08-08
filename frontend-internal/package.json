@@ -2,6 +2,8 @@
     "name": "frontend-internal",
     "version": "0.1.0",
     "private": true,
+    "proxy": "http://localhost:8099",
+    "homepage": ".",
     "dependencies": {
         "@fortawesome/fontawesome": "^1.1.8",
         "@fortawesome/fontawesome-svg-core": "^6.4.0",
@@ -26,7 +28,6 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject"
     },
-    "proxy": "http://localhost:8099",
     "eslintConfig": {
         "extends": [
             "react-app",

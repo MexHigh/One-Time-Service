@@ -1,5 +1,5 @@
-//const DEBUG_API_HOST = null
-const DEBUG_API_HOST = "http://localhost:1337/"
+const DEBUG_API_HOST = null
+//const DEBUG_API_HOST = "http://localhost:1337/"
 
 window.addEventListener("DOMContentLoaded", () => {
     // get DOM elements

@@ -7,14 +7,14 @@ export default function App() {
     const [ tokens, setTokens ] = useState(null)
     
     useEffect(() => {
-        fetch(`api/internal/tokens`)
+        fetch("api/internal/tokens")
             .then(r => r.json())
             .then(r => {
                 setTokens(r.response)
             })
             .catch(console.error)
 
-        fetch("/api/internal/macros")
+        fetch("api/internal/macros")
             .then(r => r.json())
             .then(r => {
                 setMacros(r.response)
