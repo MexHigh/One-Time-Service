@@ -1,7 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 
-VERSION="0.1.0"
+VERSION="${1:-dev}"
 IMAGE_URL="registry.git.leon.wtf/leon/one-time-service/amd64"
 
-docker build -t $IMAGE_URL:$VERSION .
-docker push $IMAGE_URL:$VERSION
+echo "[*] Building image with tag: $IMAGE_URL:$VERSION"
+
+docker build --build-arg ADDON_VERSION=$VERSION -t $IMAGE_URL:$VERSION .
+#docker push $IMAGE_URL:$VERSION

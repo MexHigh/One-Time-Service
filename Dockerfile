@@ -17,8 +17,9 @@ COPY --from=backend-builder /go/bin/backend /app/backend
 COPY --from=internal-frontend-builder /tmp/build /frontend-internal
 COPY frontend-public/ /frontend-public
 
+ARG ADDON_VERSION=dev
 LABEL \
-  io.hass.version="0.1.0" \
+  io.hass.version=$ADDON_VERSION \
   io.hass.type="addon" \
   io.hass.arch="amd64"
 

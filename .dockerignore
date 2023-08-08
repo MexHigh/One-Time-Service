@@ -1,0 +1,8 @@
+.vscode
+config.yaml
+
+backend/run-local.sh
+backend/db.json
+
+frontend-internal/node_modules
+frontend-internal/build
