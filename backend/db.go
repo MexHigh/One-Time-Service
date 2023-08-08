@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"sync"
 	"time"
 )
@@ -18,7 +19,10 @@ type DB struct {
 func NewDB(path string) *DB {
 	_, err := os.Stat(path)
 	if errors.Is(err, os.ErrNotExist) {
-		// init file
+		// init folder and file
+		if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+			panic(err)
+		}
 		_, err := os.Create(path)
 		if err != nil {
 			panic(err)
