@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import MacroAdder from "./MacroAdder"
 import MacroModal from "./MacroModal"
 
@@ -18,6 +18,7 @@ export default function MacroManager({ macros }) {
                     <MacroAdder />
                     <div>
                         { macros && macros.map(macro => (
+                            // eslint-disable-next-line
                             <a
                                 key={macro}
                                 role="button"

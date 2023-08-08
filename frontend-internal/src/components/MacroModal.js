@@ -41,6 +41,7 @@ export default function MacroModal({ open, closeCallback, macroName }) {
         <dialog open={open}>
             <article>
                 <header>
+                    {/* eslint-disable-next-line */}
                     <a 
                         aria-label="Close" 
                         className="close"
@@ -65,7 +66,7 @@ export default function MacroModal({ open, closeCallback, macroName }) {
                             <button
                                 aria-busy={deleteLoading}
                                 onClick={deleteMacro}
-                            >Delete</button>
+                            >Delete Macro and associated Tokens</button>
                         </footer>
                     </>
                 ) : <progress />}
