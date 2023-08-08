@@ -145,22 +145,38 @@ func handleCreateMacro(c *gin.Context) {
 }
 
 func handleDeleteMacro(c *gin.Context) {
-	tokenParam := c.Query("name")
-	if tokenParam == "" {
+	macroParam := c.Query("name")
+	if macroParam == "" {
 		c.JSON(http.StatusBadRequest, GenericResponse{
 			Error: "name parameter is empty",
 		})
 		return
 	}
 
-	if err := db.DeleteMacro(tokenParam); err != nil {
+	// first, delete all tokens using this macro
+	tokenNames, err := db.GetTokensByMacroName(macroParam)
+	if err != nil {
+		c.JSON(http.StatusNotFound, GenericResponse{
+			Error: err.Error(),
+		})
+		return
+	}
+	for _, tokenName := range tokenNames {
+		if err := db.DeleteToken(tokenName); err != nil {
+			c.JSON(http.StatusInternalServerError, GenericResponse{
+				Error: err.Error(),
+			})
+			return
+		}
+	}
+
+	// then, delete the macro itself
+	if err := db.DeleteMacro(macroParam); err != nil {
 		c.JSON(http.StatusInternalServerError, GenericResponse{
 			Error: err.Error(),
 		})
 		return
 	}
-
-	// TODO: Deleting a macro should also delete all tokens, using this macro
 
 	c.JSON(http.StatusOK, GenericResponse{
 		Response: "Deleted",
@@ -202,7 +218,13 @@ func handleCreateToken(c *gin.Context) {
 		return
 	}
 
-	// TODO: Check if macro name exists
+	// check if macro exists
+	if _, err := db.GetMacro(body.MacroName); err != nil {
+		c.JSON(http.StatusNotFound, GenericResponse{
+			Error: err.Error(),
+		})
+		return
+	}
 
 	now := time.Now()
 

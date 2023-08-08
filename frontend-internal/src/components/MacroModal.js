@@ -17,7 +17,7 @@ export default function MacroModal({ open, closeCallback, macroName }) {
     const deleteMacro = () => {
         setDeleteLoading(true)
 
-        if (!window.confirm("Really delete?")) {
+        if (!window.confirm("Really delete macro? This will also delete all tokens associated with this macro!")) {
             setDeleteLoading(false)
             return false
         }

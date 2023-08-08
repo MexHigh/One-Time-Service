@@ -147,7 +147,7 @@ func (db *DB) DeleteMacro(name string) (err error) {
 
 func (db *DB) GetTokenNames() (tokenNames []string, err error) {
 	err = db.claim(false, func(dbc *DBContent) error {
-		for name, _ := range dbc.Tokens {
+		for name := range dbc.Tokens {
 			tokenNames = append(tokenNames, name)
 		}
 		return nil
@@ -162,6 +162,18 @@ func (db *DB) GetTokenDetails(token string) (td *TokenDetails, err error) {
 			return fmt.Errorf("token '%s' does not exist", token)
 		}
 		td = tdTemp
+		return nil
+	})
+	return
+}
+
+func (db *DB) GetTokensByMacroName(macroName string) (tokenNames []string, err error) {
+	err = db.claim(false, func(dbc *DBContent) error {
+		for name, details := range dbc.Tokens {
+			if details.MacroName == macroName {
+				tokenNames = append(tokenNames, name)
+			}
+		}
 		return nil
 	})
 	return
