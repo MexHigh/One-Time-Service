@@ -10,6 +10,7 @@ Possible use cases:
 - Let your neighbors activate your vacuum cleaner when you are on vacation
 
 ## How does it work?
+
 The Add-on exposes a separate port (on port 1337 by default) which can be used by a reverse proxy exposed to the internet. This service is used to submit the tokens from the "outside world". The add-ons admin dashboard can be used to create the so-called Macros and Tokens.
 
 A **Macro** is just a way to name a possibly complex Home Assistant service call for better reusability inside the add-on, e.g. if used in multiple tokens at once or if a token must be recreated on a regular basis.
