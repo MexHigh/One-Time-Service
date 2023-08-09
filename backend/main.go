@@ -24,6 +24,7 @@ func main() {
 
 	/// INTERNAL ROUTER ///
 	internalRouter := gin.Default()
+	internalRouter.SetTrustedProxies([]string{"172.30.32.2"}) // ingress IP
 
 	// frontend route
 	internalRouter.Use(static.Serve("/", static.LocalFile(*internalFrontendPath, true)))
