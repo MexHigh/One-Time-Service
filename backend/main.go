@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"log"
 
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
@@ -21,6 +22,12 @@ var (
 func main() {
 	flag.Parse()
 	db = NewDB(*dbPath)
+
+	if hassApiUrl == nil && corsAllowDebug == nil && mockOptionsJson == nil {
+		gin.SetMode(gin.ReleaseMode)
+	} else {
+		log.Println("[WARNING] One of -hass-api-url, -cors-allow-debug or -mock-options-json was set! This prevents Gin from using Release mode!")
+	}
 
 	/// INTERNAL ROUTER ///
 	internalRouter := gin.Default()

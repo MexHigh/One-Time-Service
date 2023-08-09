@@ -55,6 +55,14 @@ export default function TokenManager({ macros, tokens }) {
                         ))}
                     </ul>
                 </div>
+                {/*<footer>
+                    <button className="outline">
+                        Delete expired Tokens
+                    </button>
+                    <button className="outline">
+                        Delete all Tokens
+                    </button>
+                </footer>*/}
             </article>
             <TokenModal 
                 open={modal ? true : false}

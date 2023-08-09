@@ -24,9 +24,9 @@ func handleCodeSubmit(c *gin.Context) {
 		return
 	}
 
-	if details.Expires != nil && details.Expires.After(time.Now()) {
+	if details.Expires != nil && time.Now().After(*details.Expires) {
 		c.JSON(http.StatusUnauthorized, GenericResponse{
-			Error: "token is expired",
+			Error: "token has expired",
 		})
 		return
 	}
