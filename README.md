@@ -20,6 +20,8 @@ The differences to just using vanilla webhook automations are:
 - A webhook URL can neither expire nor be invalidated once used
 - The exidential use of a webhook URL can occur. E.g. when you call the webhook URL from a mobile browser, leave the page open, and reopen the browser later, the webhook is called again.
 
+Tokens an Macro definitions are stored in a JSON file in `/share/one-time-service/db.json`.
+
 #### Create a new Macro
 
 ![Macro creation](./screenshots/macro-creation.png)
@@ -31,3 +33,13 @@ The differences to just using vanilla webhook automations are:
 #### Public Token submission page
 
 ![Public Token submission](./screenshots/token-submission.png)
+
+## Tech stack
+
+The backend is written in Go 1.18 using the [Gin Web Framework](https://github.com/gin-gonic).
+
+The public frontend for token submission is written in plain HTML and JavaScript.
+
+The internal ingress frontend for macro and token management is written in React (via CRA).
+
+Both frontends use [Pico CSS](https://picocss.com/) as their CSS framework.
