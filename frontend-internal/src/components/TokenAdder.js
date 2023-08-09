@@ -40,8 +40,12 @@ export default function TokenAdder({ macros }) {
         })
             .then(r => r.json()) // TODO handle errors
             .then(r => {
-                console.log(r)
-                window.location.reload()
+                if (r.error) {
+                    alert(`An error occured white creating the macro: ${r.error || "unknown :("}`)
+                } else {
+                    console.log(r)
+                    window.location.reload()
+                }
             })
             .catch(console.error)
     }
