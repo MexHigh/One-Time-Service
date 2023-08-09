@@ -23,10 +23,10 @@ func main() {
 	flag.Parse()
 	db = NewDB(*dbPath)
 
-	if *corsAllowDebug && *mockOptionsJson {
-		gin.SetMode(gin.ReleaseMode)
-	} else {
+	if *corsAllowDebug || *mockOptionsJson {
 		log.Println("[WARNING] One of -cors-allow-debug or -mock-options-json was set! This prevents Gin from using Release mode!")
+	} else {
+		gin.SetMode(gin.ReleaseMode)
 	}
 
 	/// INTERNAL ROUTER ///
