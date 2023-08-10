@@ -20,7 +20,7 @@ export default function TokenManager({ macros, tokens }) {
                     <TokenAdder macros={macros} />
                     <ul>
                         { tokens && tokens.map(token => (
-                            <li key="token">
+                            <li key={token}>
                                 <code>
                                     {/* eslint-disable-next-line */}
                                     <a
@@ -44,7 +44,13 @@ export default function TokenManager({ macros, tokens }) {
                                             .then(r => r.json())
                                             .then(r => {
                                                 // TODO error checking
-                                                navigator.clipboard.writeText(r.response);
+                                                navigator.clipboard.writeText(r.response)
+                                                    .then(() => {
+                                                        console.log(`Successfully copied ${r.response}`)
+                                                    })
+                                                    .catch(e => {
+                                                        console.log(`Error while copying ${r.response}: ${e}`)
+                                                    })
                                             })
                                             .catch(console.error)
                                     }}

@@ -77,7 +77,13 @@ export default function TokenModal({ open, closeCallback, tokenName }) {
                                         .then(r => r.json())
                                         .then(r => {
                                             // TODO error checking
-                                            navigator.clipboard.writeText(r.response);
+                                            navigator.clipboard.writeText(r.response)
+                                                .then(() => {
+                                                    console.log(`Successfully copied ${r.response}`)
+                                                })
+                                                .catch(e => {
+                                                    console.log(`Error while copying ${r.response}: ${e}`)
+                                                })
                                         })
                                         .catch(console.error)
                                 }}

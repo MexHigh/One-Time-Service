@@ -56,16 +56,14 @@ export default function TokenAdder({ macros }) {
             <form>
                 <label>
                     Select Macro to execute
-                    <select>
-                        { macros && macros.map((macro, index) => (
+                    <select
+                        value={selectedMacro}
+                        onChange={e => setSelectedMacro(e.target.value)}
+                    >
+                        { macros && macros.map(macro => (
                             <option
-                                selected={index === 0 ? true : false}
                                 key={macro}
-                                value={selectedMacro}
-                                onChange={e => {
-                                    e.preventDefault()
-                                    setSelectedMacro(macro)
-                                }}
+                                value={macro}
                             >{ macro } </option>
                         ))}
                     </select>
