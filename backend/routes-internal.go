@@ -2,10 +2,8 @@ package main
 
 import (
 	"encoding/base64"
-	"encoding/json"
-	"io"
 	"net/http"
-	"os"
+	"net/url"
 	"strings"
 	"time"
 
@@ -278,23 +276,7 @@ func handleGetShareUrl(c *gin.Context) {
 		return
 	}
 
-	if *mockOptionsJson {
-		c.JSON(http.StatusOK, GenericResponse{
-			Response: "http://test-url/" + "?token=" + tokenParam,
-		})
-		return
-	}
-
-	file, err := os.Open("/data/options.json")
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, GenericResponse{
-			Error: err.Error(),
-		})
-		return
-	}
-	defer file.Close()
-
-	bytes, err := io.ReadAll(file)
+	options, err := getAddonOptions()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, GenericResponse{
 			Error: err.Error(),
@@ -302,10 +284,8 @@ func handleGetShareUrl(c *gin.Context) {
 		return
 	}
 
-	var options struct {
-		BaseURL string `json:"public_token_base_url"`
-	}
-	if err := json.Unmarshal(bytes, &options); err != nil {
+	urlNoQuery, err := url.JoinPath(options.BaseURL, "/")
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, GenericResponse{
 			Error: err.Error(),
 		})
@@ -313,6 +293,6 @@ func handleGetShareUrl(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, GenericResponse{
-		Response: options.BaseURL + "?token=" + tokenParam,
+		Response: urlNoQuery + "?token=" + tokenParam,
 	})
 }

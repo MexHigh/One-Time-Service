@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -48,6 +49,20 @@ func handleCodeSubmit(c *gin.Context) {
 
 	// delete ("invalidate") token on success
 	if err := db.DeleteToken(tokenParam); err != nil {
+		c.JSON(http.StatusInternalServerError, GenericResponse{
+			Error: err.Error(),
+		})
+		return
+	}
+
+	if err := CreateHomeassistantNotification(
+		"One Time Service Token submitted",
+		fmt.Sprintf("Token: `%s`\nExecuted macro: `%s`\nSubmitter IP: `%s`",
+			tokenParam,
+			details.MacroName,
+			c.RemoteIP(),
+		),
+	); err != nil {
 		c.JSON(http.StatusInternalServerError, GenericResponse{
 			Error: err.Error(),
 		})
