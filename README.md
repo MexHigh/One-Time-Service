@@ -37,7 +37,7 @@ Tokens an Macro definitions are stored in a JSON file in `/share/one-time-servic
 
 ## Tech stack
 
-The backend is written in Go 1.18 using the [Gin Web Framework](https://github.com/gin-gonic).
+The backend is written in Go 1.20 using the [Gin Web Framework](https://github.com/gin-gonic).
 
 The public frontend for token submission is written in plain HTML and JavaScript.
 

@@ -1,4 +1,4 @@
-FROM golang:1.18-alpine AS backend-builder
+FROM golang:1.20-alpine AS backend-builder
 WORKDIR /go/src/app
 COPY backend/ .
 RUN go get -d -v ./...

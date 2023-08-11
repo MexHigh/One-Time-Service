@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- Bumped Go from 1.18 to 1.20
+- 
+
 ## 0.1.1
 
 - Fixed wrong check of development flags, preventing the API server to enter production mode

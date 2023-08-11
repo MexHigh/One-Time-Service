@@ -1,6 +1,6 @@
 module git.leon.wtf/leon/one-time-service/backend
 
-go 1.18
+go 1.20
 
 require (
 	github.com/gin-gonic/contrib v0.0.0-20221130124618-7e01895a63f2
