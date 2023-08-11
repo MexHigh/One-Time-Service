@@ -10,10 +10,11 @@ COPY frontend-internal/ .
 RUN npm install && npm run build
 
 FROM alpine:latest
+# install stuff
+RUN apk add --no-cache tzdata
+# copy in backend and frontends 
 WORKDIR /app
-# copy compiled backend
 COPY --from=backend-builder /go/bin/backend /app/backend
-# copy frontends
 COPY --from=internal-frontend-builder /tmp/build /frontend-internal
 COPY frontend-public/ /frontend-public
 

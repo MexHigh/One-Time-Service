@@ -3,7 +3,8 @@
 ## 0.1.2
 
 - Bumped Go from 1.18 to 1.20
-- 
+- Implemented notifications on when a token is submitted 
+- Added tzdata to image for correct timezone info
 
 ## 0.1.1
 
