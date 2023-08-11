@@ -2,8 +2,9 @@
 
 ## 0.1.2
 
+- Bugfix: Macro state when creating a token was sometimes not in sync with actual selection
 - Bumped Go from 1.18 to 1.20
-- Implemented notifications on when a token is submitted 
+- New Feature: Implemented notifications on when a token is submitted 
 - Added tzdata to image for correct timezone info
 
 ## 0.1.1
