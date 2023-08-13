@@ -1,11 +1,33 @@
 import React, { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faClipboard } from "@fortawesome/free-regular-svg-icons"
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons"
 import TokenAdder from "./TokenAdder"
-import TokenModal from "./TokenModal"
 
 export default function TokenManager({ macros, tokens }) {
-    const [ modal, setModal ] = useState(null)
+    const [ deleteLoading, setDeleteLoading ] = useState(false)
+
+    const deleteToken = token => {
+        setDeleteLoading(true)
+
+        if (!window.confirm("Really delete token?")) {
+            setDeleteLoading(false)
+            return false
+        }
+
+        fetch(`api/internal/token?token=${token}`, {
+            method: "DELETE"
+        })
+            .then(r => r.json())
+            .then(r => {
+                setTimeout(() => {
+                    window.location.reload()
+                }, 1000) // artificial delay ;)
+            })
+            .catch(err => {
+                setDeleteLoading(false)
+                console.error(err)
+            })
+    }
 
     return (
         <>
@@ -18,48 +40,61 @@ export default function TokenManager({ macros, tokens }) {
                 </header>
                 <div>
                     <TokenAdder macros={macros} />
-                    <ul>
-                        { tokens && tokens.map(token => (
-                            <li key={token}>
-                                <code>
-                                    {/* eslint-disable-next-line */}
-                                    <a
+                    <div>
+                        { tokens && Object.entries(tokens).map(([token, details]) => (
+                            <article key={token} style={{
+                                padding: "1.5em"
+                            }}>
+                                <div style={{
+                                    display: "flex",
+                                    justifyContent: "space-between"
+                                }}>
+                                    <h6>
+                                        { details.macro_name }
+                                        { details.comment && (
+                                            <i> ("{ details.comment }")</i>
+                                        )}
+                                    </h6>
+                                    <a 
+                                        aria-busy={ deleteLoading ? true : false }
+                                        role="button"
+                                        className="secondary" 
+                                        style={{
+                                            alignSelf: "start",
+                                            padding: "5px 12px",
+                                            cursor: "pointer"
+                                        }}
                                         href=""
                                         onClick={e => {
                                             e.preventDefault()
-                                            setModal(token)
+                                            deleteToken(token)
                                         }}
-                                    >{ token }</a>
-                                </code>
-                                <span>&nbsp;&nbsp;</span>
-                                {/* eslint-disable-next-line */}
-                                <a
-                                    className="secondary"
-                                    style={{
-                                        cursor: "pointer"
-                                    }}
-                                    onClick={e => {
-                                        e.preventDefault()
-                                        fetch(`api/internal/token/share-url?token=${token}`)
-                                            .then(r => r.json())
-                                            .then(r => {
-                                                // TODO error checking
-                                                navigator.clipboard.writeText(r.response)
-                                                    .then(() => {
-                                                        console.log(`Successfully copied ${r.response}`)
-                                                    })
-                                                    .catch(e => {
-                                                        console.log(`Error while copying ${r.response}: ${e}`)
-                                                    })
-                                            })
-                                            .catch(console.error)
-                                    }}
-                                >
-                                    <FontAwesomeIcon icon={faClipboard} />
-                                </a>
-                            </li>
+                                    >
+                                        { !deleteLoading && (
+                                            <FontAwesomeIcon icon={faTrashCan} />
+                                        )}
+                                    </a>
+                                </div>
+                                <p>
+                                    <code>
+                                        <a
+                                            href={ details.share_url }
+                                            target="_blank"
+                                        >
+                                            { details.share_url }
+                                        </a>
+                                    </code>
+                                </p>
+                                <small>
+                                    <strong>Created: </strong>{ new Date(details.created).toLocaleString() }<br/>
+                                    <strong>Expires: </strong>{ details.expires ? new Date(details.expires).toLocaleString() : "never" }<br/>
+                                    {/*
+                                    <strong>Uses left: </strong>5/10<br/>
+                                    */}
+                                </small>
+                            </article>
                         ))}
-                    </ul>
+                    </div>
                 </div>
                 {/*<footer>
                     <button className="outline">
@@ -70,11 +105,6 @@ export default function TokenManager({ macros, tokens }) {
                     </button>
                 </footer>*/}
             </article>
-            <TokenModal 
-                open={modal ? true : false}
-                closeCallback={() => setModal(null)}
-                tokenName={modal}
-            />
         </>
     )
 }

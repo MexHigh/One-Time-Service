@@ -3,24 +3,31 @@ package main
 import (
 	"flag"
 	"log"
+	"net/url"
 
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
-var (
+var ( // flags
 	dbPath               *string = flag.String("db", "./db.json", "Path to database JSON file")
 	internalFrontendPath *string = flag.String("internal-frontend-path", "../frontend-internal", "Base path to static internal frontend files")
 	publicFrontendPath   *string = flag.String("public-frontend-path", "../frontend-public", "Base path to static public frontend files")
 	hassApiUrl           *string = flag.String("hass-api-url", "http://supervisor/core/api", "Custom base URL for Hass API")
 	corsAllowDebug       *bool   = flag.Bool("cors-allow-all", false, "Allows all CORS request (for testing only!)")
 	mockOptionsJson      *bool   = flag.Bool("mock-options-json", false, "Does not read from /data/options.json (for testing only!)")
+)
 
-	db *DB
+var ( // global vars
+	db           *DB
+	baseTokenURL string // e.g. https://example.org/?token=
 )
 
 func main() {
 	flag.Parse()
+	if err := initBaseTokenURL(); err != nil {
+		panic(err)
+	}
 	db = NewDB(*dbPath)
 
 	if *corsAllowDebug || *mockOptionsJson {
@@ -42,15 +49,15 @@ func main() {
 		internalRouterApi.Use(corsAllowAll())
 	}
 	internalRouterApi.GET("/ping", handlePing)
-	internalRouterApi.GET("/macros", handleGetMacros)
+	internalRouterApi.GET("/macros", handleGetMacroNames)
 	internalRouterApi.GET("/macro/details", handleGetMacro)
 	internalRouterApi.POST("/macro", handleCreateMacro)
 	internalRouterApi.DELETE("/macro", handleDeleteMacro)
-	internalRouterApi.GET("/tokens", handleGetTokens)
+	internalRouterApi.GET("/tokens", handleGetTokenNames)
+	internalRouterApi.GET("/tokens/details", handleGetTokensWithDetails)
 	internalRouterApi.GET("/token/details", getTokenDetails) // generic route implementation
 	internalRouterApi.POST("/token", handleCreateToken)
 	internalRouterApi.DELETE("/token", handleDeleteToken)
-	internalRouterApi.GET("/token/share-url", handleGetShareUrl)
 
 	go internalRouter.Run(":8099")
 
@@ -73,4 +80,19 @@ func main() {
 
 	// block
 	select {}
+}
+
+func initBaseTokenURL() error {
+	options, err := getAddonOptions()
+	if err != nil {
+		return err
+	}
+
+	urlNoQuery, err := url.JoinPath(options.BaseURL, "/")
+	if err != nil {
+		return err
+	}
+
+	baseTokenURL = urlNoQuery + "?token="
+	return nil
 }

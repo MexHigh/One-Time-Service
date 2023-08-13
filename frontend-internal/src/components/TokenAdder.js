@@ -5,6 +5,7 @@ export default function TokenAdder({ macros }) {
     const [ comment, setComment ] = useState("")
     const [ expiryDate, setExpiryDate ] = useState("")
     const [ expiryTime, setExpiryTime ] = useState("")
+    const [ loading, setLoading ] = useState(false)
 
     useEffect(() => {
         if (macros)
@@ -13,6 +14,7 @@ export default function TokenAdder({ macros }) {
 
     const addToken = event => {
         event.preventDefault()
+        setLoading(true)
 
         let dateTimeIso = undefined
         if (expiryDate || expiryTime) {
@@ -113,6 +115,7 @@ export default function TokenAdder({ macros }) {
                 <button 
                     type="submit"
                     onClick={addToken}
+                    aria-busy={ loading ? true : false }
                 >Generate</button>
             </form>
         </details>

@@ -159,6 +159,14 @@ func (db *DB) GetTokenNames() (tokenNames []string, err error) {
 	return
 }
 
+func (db *DB) GetAllTokenDetails() (td map[string]*TokenDetails, err error) {
+	err = db.claim(false, func(dbc *DBContent) error {
+		td = dbc.Tokens
+		return nil
+	})
+	return
+}
+
 func (db *DB) GetTokenDetails(token string) (td *TokenDetails, err error) {
 	err = db.claim(false, func(dbc *DBContent) error {
 		tdTemp, ok := dbc.Tokens[token]

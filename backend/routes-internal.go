@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/base64"
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 
@@ -11,7 +10,12 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func handleGetMacros(c *gin.Context) {
+type TokenDetailsWithShareURL struct {
+	TokenDetails `json:",inline"`
+	ShareURL     string `json:"share_url"`
+}
+
+func handleGetMacroNames(c *gin.Context) {
 	macros, err := db.GetMacroNames()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, GenericResponse{
@@ -173,7 +177,7 @@ func handleDeleteMacro(c *gin.Context) {
 	})
 }
 
-func handleGetTokens(c *gin.Context) {
+func handleGetTokenNames(c *gin.Context) {
 	tokens, err := db.GetTokenNames()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, GenericResponse{
@@ -184,6 +188,29 @@ func handleGetTokens(c *gin.Context) {
 
 	c.JSON(http.StatusOK, GenericResponse{
 		Response: tokens,
+	})
+}
+
+func handleGetTokensWithDetails(c *gin.Context) {
+	tokens, err := db.GetAllTokenDetails()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, GenericResponse{
+			Error: err.Error(),
+		})
+		return
+	}
+
+	// append share URLs to all tokens
+	tokensWithShareURL := make(map[string]*TokenDetailsWithShareURL)
+	for token, details := range tokens {
+		tokensWithShareURL[token] = &TokenDetailsWithShareURL{
+			*details,
+			baseTokenURL + token,
+		}
+	}
+
+	c.JSON(http.StatusOK, GenericResponse{
+		Response: tokensWithShareURL,
 	})
 }
 
@@ -256,43 +283,5 @@ func handleDeleteToken(c *gin.Context) {
 
 	c.JSON(http.StatusOK, GenericResponse{
 		Response: "Deleted",
-	})
-}
-
-func handleGetShareUrl(c *gin.Context) {
-	tokenParam := c.Query("token")
-	if tokenParam == "" {
-		c.JSON(http.StatusBadRequest, GenericResponse{
-			Error: "token parameter is empty",
-		})
-		return
-	}
-
-	_, err := db.GetTokenDetails(tokenParam)
-	if err != nil {
-		c.JSON(http.StatusNotFound, GenericResponse{
-			Error: err.Error(),
-		})
-		return
-	}
-
-	options, err := getAddonOptions()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, GenericResponse{
-			Error: err.Error(),
-		})
-		return
-	}
-
-	urlNoQuery, err := url.JoinPath(options.BaseURL, "/")
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, GenericResponse{
-			Error: err.Error(),
-		})
-		return
-	}
-
-	c.JSON(http.StatusOK, GenericResponse{
-		Response: urlNoQuery + "?token=" + tokenParam,
 	})
 }

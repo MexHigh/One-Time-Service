@@ -30,6 +30,9 @@ func getTokenDetails(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, GenericResponse{
-		Response: details,
+		Response: TokenDetailsWithShareURL{
+			*details,
+			baseTokenURL + tokenParam, // share URL
+		},
 	})
 }

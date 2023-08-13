@@ -7,7 +7,7 @@ export default function App() {
     const [ tokens, setTokens ] = useState(null)
     
     useEffect(() => {
-        fetch("api/internal/tokens")
+        fetch("api/internal/tokens/details")
             .then(r => r.json())
             .then(r => {
                 setTokens(r.response)
