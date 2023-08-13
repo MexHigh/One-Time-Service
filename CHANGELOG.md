@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.3
+
+- UI: Removed Token Modal - displaying all information and delete action in main view
+- Easier Token copying, as clipboard API cannot be used in Webview (Home Assistant Companion) 
+
 ## 0.1.2
 
 - Bugfix: Macro state when creating a token was sometimes not in sync with actual selection
