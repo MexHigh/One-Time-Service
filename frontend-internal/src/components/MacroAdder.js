@@ -3,9 +3,11 @@ import React, { useState } from "react"
 export default function MacroAdder() {
     const [ name, setName ] = useState("")
     const [ yaml, setYaml ] = useState("")
+    const [ loading, setLoading ] = useState(false)
     
     const addMacro = event => {
         event.preventDefault()
+        setLoading(true)
 
         if (name === "" || yaml === "") {
             alert("Name or YAML field is empty")
@@ -25,6 +27,7 @@ export default function MacroAdder() {
             .then(r => r.json())
             .then(r => {
                 if (r.error) {
+                    setLoading(false)
                     alert(`An error occured white creating the macro: ${r.error || "unknown :("}`)
                 } else {
                     console.log(r)
@@ -64,6 +67,7 @@ export default function MacroAdder() {
                 <button 
                     type="submit"
                     onClick={addMacro}
+                    aria-busy={ loading ? true : false}
                 >Create</button>
             </form>
         </details>

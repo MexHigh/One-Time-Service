@@ -43,6 +43,7 @@ export default function TokenAdder({ macros }) {
             .then(r => r.json()) // TODO handle errors
             .then(r => {
                 if (r.error) {
+                    setLoading(false)
                     alert(`An error occured white creating the macro: ${r.error || "unknown :("}`)
                 } else {
                     console.log(r)

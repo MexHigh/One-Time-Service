@@ -29,6 +29,11 @@ export default function TokenManager({ macros, tokens }) {
             })
     }
 
+    const addPreferedLinebreakBeforeToken = shareUrl => {
+        let splat = shareUrl.split("=")
+        return <span>{ splat[0] }=<wbr/>{ splat[1] }</span>
+    }
+
     return (
         <>
             <article>
@@ -75,22 +80,29 @@ export default function TokenManager({ macros, tokens }) {
                                         )}
                                     </a>
                                 </div>
-                                <p>
+                                <figure style={{
+                                    marginBottom: ".1em"
+                                }}>
                                     <code>
+                                        { addPreferedLinebreakBeforeToken(details.share_url) }
+                                    </code>
+                                </figure>
+                                <p style={{
+                                    marginBottom: "1em"
+                                }}>
+                                    <small>
                                         <a
                                             href={ details.share_url }
                                             target="_blank"
                                         >
-                                            { details.share_url }
+                                            Open Link
                                         </a>
-                                    </code>
+                                    </small>
                                 </p>
                                 <small>
                                     <strong>Created: </strong>{ new Date(details.created).toLocaleString() }<br/>
                                     <strong>Expires: </strong>{ details.expires ? new Date(details.expires).toLocaleString() : "never" }<br/>
-                                    {/*
-                                    <strong>Uses left: </strong>5/10<br/>
-                                    */}
+                                    <strong>Uses left: </strong>1 / 1<br/>
                                 </small>
                             </article>
                         ))}
