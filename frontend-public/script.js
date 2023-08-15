@@ -1,5 +1,5 @@
-const DEBUG_API_HOST = null
-//const DEBUG_API_HOST = "http://localhost:1337/"
+//const DEBUG_API_HOST = null
+const DEBUG_API_HOST = "http://localhost:1337/"
 
 window.addEventListener("DOMContentLoaded", () => {
     // get DOM elements
@@ -56,7 +56,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 if (r.response.error) {
                     throw new Error("response has error: " + r.response.error)
                 }
-                let { macro_name, expires, comment } = r.response
+                let { macro_name, expires, comment, uses_max, uses_left } = r.response
 
                 document.querySelector("#action-container > code").innerHTML = macro_name
 
@@ -71,6 +71,8 @@ window.addEventListener("DOMContentLoaded", () => {
                     container.hidden = false
                     container.querySelector("code").innerHTML = comment
                 }
+
+                document.querySelector("#uses-container > code").innerHTML = `${uses_left}/${uses_max}`
                 
                 loadingCard.hidden = true
                 detailsCard.hidden = false

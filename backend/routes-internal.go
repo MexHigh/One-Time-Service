@@ -218,7 +218,7 @@ func handleCreateToken(c *gin.Context) {
 	var body struct {
 		MacroName string     `json:"macro_name" binding:"required"`
 		Expires   *time.Time `json:"expires,omitempty"`
-		UsagesMax int        `json:"usages_max"`
+		UsesMax   int        `json:"uses_max"`
 		Comment   *string    `json:"comment,omitempty"`
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -248,19 +248,19 @@ func handleCreateToken(c *gin.Context) {
 
 	// set max usages default
 	var usagesMax int
-	if body.UsagesMax == 0 { // default (nothing specified)
+	if body.UsesMax == 0 { // default (nothing specified)
 		usagesMax = 1 // when nothing was specified (or 0 explicitly) set to one usage
 	} else {
-		usagesMax = body.UsagesMax
+		usagesMax = body.UsesMax
 	}
 
 	sc := &TokenDetails{
-		MacroName:  body.MacroName,
-		Created:    &now,
-		Expires:    expires, // might be nil, but thats intended
-		UsagesMax:  usagesMax,
-		UsagesLeft: usagesMax,
-		Comment:    body.Comment, // might be nil, but thats intended
+		MacroName: body.MacroName,
+		Created:   &now,
+		Expires:   expires, // might be nil, but thats intended
+		UsesMax:   usagesMax,
+		UsesLeft:  usagesMax,
+		Comment:   body.Comment, // might be nil, but thats intended
 	}
 
 	randString := generateRandomString(32)

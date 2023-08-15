@@ -105,12 +105,12 @@ type ServiceCall struct {
 }
 
 type TokenDetails struct {
-	MacroName  string     `json:"macro_name"`
-	Created    *time.Time `json:"created"`
-	Expires    *time.Time `json:"expires"`
-	UsagesMax  int        `json:"usages_max"`
-	UsagesLeft int        `json:"usages_left"`
-	Comment    *string    `json:"comment"`
+	MacroName string     `json:"macro_name"`
+	Created   *time.Time `json:"created"`
+	Expires   *time.Time `json:"expires"`
+	UsesMax   int        `json:"uses_max"`
+	UsesLeft  int        `json:"uses_left"`
+	Comment   *string    `json:"comment"`
 }
 
 /// MACRO FUNCTIONS ///
@@ -211,11 +211,11 @@ func (db *DB) DecrementUseCountForToken(token string) (err error) {
 		if !ok {
 			return fmt.Errorf("token '%s' does not exist", token)
 		}
-		if tempToken.UsagesLeft <= 0 {
+		if tempToken.UsesLeft <= 0 {
 			return fmt.Errorf("usage limit of token '%s' exceeded", token)
 		}
 		// directly access the token to preserve references
-		dbc.Tokens[token].UsagesLeft -= 1
+		dbc.Tokens[token].UsesLeft -= 1
 		return nil
 	})
 	return

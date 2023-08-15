@@ -25,7 +25,7 @@ func handleCodeSubmit(c *gin.Context) {
 		return
 	}
 
-	if details.UsagesLeft <= 0 {
+	if details.UsesLeft <= 0 {
 		c.JSON(http.StatusBadRequest, GenericResponse{
 			Error: "usage limit of token exceeded",
 		})
