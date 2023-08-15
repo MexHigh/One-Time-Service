@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react"
 
 export default function TokenAdder({ macros }) {
     const [ selectedMacro, setSelectedMacro ] = useState("")
-    const [ comment, setComment ] = useState("")
+    const [ numOfUses, setNumOfUses ] = useState(1)
     const [ expiryDate, setExpiryDate ] = useState("")
     const [ expiryTime, setExpiryTime ] = useState("")
+    const [ comment, setComment ] = useState("")
     const [ loading, setLoading ] = useState(false)
 
     useEffect(() => {
@@ -30,6 +31,7 @@ export default function TokenAdder({ macros }) {
         let body = {
             "macro_name": selectedMacro,
             "expires": dateTimeIso,
+            "uses_max": numOfUses,
             "comment": parsedComment
         }
         
@@ -57,30 +59,37 @@ export default function TokenAdder({ macros }) {
         <details>
             <summary role="button" className="secondary">Generate a new Token</summary>
             <form>
-                <label>
-                    Select Macro to execute
-                    <select
-                        value={selectedMacro}
-                        onChange={e => setSelectedMacro(e.target.value)}
-                    >
-                        { macros && macros.map(macro => (
-                            <option
-                                key={macro}
-                                value={macro}
-                            >{ macro } </option>
-                        ))}
-                    </select>
-                </label>
-
-                <label>
-                    Comment (optional, visible for token submitter)
-                    <input 
-                        type="text" 
-                        placeholder="E.g. 'Door token for Svenja'"
-                        value={comment}
-                        onChange={event => setComment(event.target.value)}
-                    />
-                </label>
+                <div className="grid">
+                    <div>
+                        <label>
+                            Select Macro to execute
+                            <select
+                                value={selectedMacro}
+                                onChange={e => setSelectedMacro(e.target.value)}
+                            >
+                                { macros && macros.map(macro => (
+                                    <option
+                                        key={macro}
+                                        value={macro}
+                                    >{ macro } </option>
+                                ))}
+                            </select>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Maximum uses
+                            <input 
+                                type="number" 
+                                value={numOfUses}
+                                onChange={e => {
+                                    e.preventDefault()
+                                    setNumOfUses(parseInt(e.target.value))
+                                }}
+                            />
+                        </label>
+                    </div>
+                </div>
 
                 <div className="grid">
                     <div>
@@ -111,7 +120,17 @@ export default function TokenAdder({ macros }) {
                     </div>
                 </div>
 
-                <p><i>A token will be automatically generated</i></p>
+                <label>
+                    Comment (optional, visible for token submitter)
+                    <input 
+                        type="text" 
+                        placeholder="E.g. 'Door token for Svenja'"
+                        value={comment}
+                        onChange={event => setComment(event.target.value)}
+                    />
+                </label>
+
+                <p><i>A token value will be automatically generated</i></p>
                 
                 <button 
                     type="submit"
