@@ -108,8 +108,12 @@ type TokenDetails struct {
 	MacroName string     `json:"macro_name"`
 	Created   *time.Time `json:"created"`
 	Expires   *time.Time `json:"expires"`
+	UsesMax   int        `json:"uses_max"`
+	UsesLeft  int        `json:"uses_left"`
 	Comment   *string    `json:"comment"`
 }
+
+/// MACRO FUNCTIONS ///
 
 func (db *DB) GetMacroNames() (out []string, err error) {
 	err = db.claim(false, func(dbc *DBContent) error {
@@ -148,6 +152,8 @@ func (db *DB) DeleteMacro(name string) (err error) {
 	})
 	return
 }
+
+/// TOKEN FUNCTIONS ///
 
 func (db *DB) GetTokenNames() (tokenNames []string, err error) {
 	err = db.claim(false, func(dbc *DBContent) error {
@@ -194,6 +200,22 @@ func (db *DB) GetTokensByMacroName(macroName string) (tokenNames []string, err e
 func (db *DB) AddToken(token string, td *TokenDetails) (err error) {
 	err = db.claim(true, func(dbc *DBContent) error {
 		dbc.Tokens[token] = td
+		return nil
+	})
+	return
+}
+
+func (db *DB) DecrementUseCountForToken(token string) (err error) {
+	err = db.claim(true, func(dbc *DBContent) error {
+		tempToken, ok := dbc.Tokens[token]
+		if !ok {
+			return fmt.Errorf("token '%s' does not exist", token)
+		}
+		if tempToken.UsesLeft <= 0 {
+			return fmt.Errorf("usage limit of token '%s' exceeded", token)
+		}
+		// directly access the token to preserve references
+		dbc.Tokens[token].UsesLeft -= 1
 		return nil
 	})
 	return
