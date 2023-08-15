@@ -25,6 +25,13 @@ func handleCodeSubmit(c *gin.Context) {
 		return
 	}
 
+	if details.UsagesLeft <= 0 {
+		c.JSON(http.StatusBadRequest, GenericResponse{
+			Error: "usage limit of token exceeded",
+		})
+		return
+	}
+
 	if details.Expires != nil && time.Now().After(*details.Expires) {
 		c.JSON(http.StatusUnauthorized, GenericResponse{
 			Error: "token has expired",
@@ -47,8 +54,7 @@ func handleCodeSubmit(c *gin.Context) {
 		return
 	}
 
-	// delete ("invalidate") token on success
-	if err := db.DeleteToken(tokenParam); err != nil {
+	if err := db.DecrementUseCountForToken(tokenParam); err != nil {
 		c.JSON(http.StatusInternalServerError, GenericResponse{
 			Error: err.Error(),
 		})
