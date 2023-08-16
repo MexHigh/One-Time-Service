@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.0
+
+- Feature: Tokens can now be used multiple times
+- This release is breaking as the database format changed!
+
 ## 0.1.3
 
 - UI: Removed Token Modal - displaying all information and delete action in main view
