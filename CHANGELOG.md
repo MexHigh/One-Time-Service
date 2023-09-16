@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1
+
+- Feature: Comment is now shown on the submission notification if available
+
 ## 0.2.0
 
 - Feature: Tokens can now be used multiple times

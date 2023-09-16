@@ -64,14 +64,20 @@ func handleCodeSubmit(c *gin.Context) {
 	ts := time.Now()
 	tsString := ts.Local().Format("02.01.2006, 15:04:05 MST")
 
+	msg := fmt.Sprintf("Token: `%s`\nExecuted macro: `%s`\nSubmitter IP: `%s`\nSubmission time: `%s`",
+		tokenParam,
+		details.MacroName,
+		c.ClientIP(),
+		tsString,
+	)
+	if details.Comment != nil {
+		// add comment field if one was set or the token
+		msg += fmt.Sprintf("\nComment: `%s`", *details.Comment)
+	}
+
 	if err := CreateHomeassistantNotification(
 		"One Time Service Token submitted",
-		fmt.Sprintf("Token: `%s`\nExecuted macro: `%s`\nSubmitter IP: `%s`\nSubmission time: `%s`",
-			tokenParam,
-			details.MacroName,
-			c.ClientIP(),
-			tsString,
-		),
+		msg,
 	); err != nil {
 		c.JSON(http.StatusInternalServerError, GenericResponse{
 			Error: err.Error(),
