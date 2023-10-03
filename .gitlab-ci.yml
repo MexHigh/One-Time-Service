@@ -26,3 +26,11 @@ docker_build_push_multiarch:
   after_script:
     - docker buildx rm one-time-service-builder
   
+#docker_homeassistant_builder:
+#  stage: build
+#  image: homeassistant/amd64-builder
+#  script:
+#    - --amd64 --aarch64 --armv7 -t .
+#
+# The home assistant builder currently doesn't support
+# pushing to custom registries! 

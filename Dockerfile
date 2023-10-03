@@ -7,8 +7,8 @@ RUN CGO_ENABLED=0 go install -a -ldflags '-extldflags "-static"' .
 FROM node:20 AS internal-frontend-builder
 WORKDIR /tmp
 COPY frontend-internal/ .
-RUN npm ci
-RUN npm run build
+RUN yarn install --network-timeout=600000
+RUN yarn run build
 
 FROM alpine:latest
 # install stuff
