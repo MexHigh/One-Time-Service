@@ -1,12 +1,14 @@
 name: "One Time Service"
 description: "Call a service with a one time token from outside Home Assistant!"
 slug: "one-time-service"
-version: "0.2.1"
+version: "13.37"
 stage: stable
 url: https://git.leon.wtf/leon/one-time-service
 arch:
   - amd64
-image: registry.git.leon.wtf/leon/one-time-service/{arch}
+  - armv7
+  - aarch64
+image: registry.git.leon.wtf/leon/one-time-service/multiarch
 
 init: false
 homeassistant_api: true
