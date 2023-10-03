@@ -49,10 +49,10 @@ func main() {
 		internalRouterApi.Use(corsAllowAll())
 	}
 	internalRouterApi.GET("/ping", handlePing)
-	internalRouterApi.GET("/macros", handleGetMacroNames)
-	internalRouterApi.GET("/macro/details", handleGetMacro)
-	internalRouterApi.POST("/macro", handleCreateMacro)
-	internalRouterApi.DELETE("/macro", handleDeleteMacro)
+	internalRouterApi.GET("/service-calls", handleGetServiceCallNames)
+	internalRouterApi.GET("/service-call/details", handleGetServiceCall)
+	internalRouterApi.POST("/service-call", handleCreateServiceCall)
+	internalRouterApi.DELETE("/service-call", handleDeleteServiceCall)
 	internalRouterApi.GET("/tokens", handleGetTokenNames)
 	internalRouterApi.GET("/tokens/details", handleGetTokensWithDetails)
 	internalRouterApi.GET("/token/details", getTokenDetails) // generic route implementation
