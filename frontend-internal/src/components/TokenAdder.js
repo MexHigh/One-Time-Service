@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 
-export default function TokenAdder({ macros }) {
-    const [ selectedMacro, setSelectedMacro ] = useState("")
+export default function TokenAdder({ serviceCalls }) {
+    const [ selectedServiceCall, setSelectedServiceCall ] = useState("")
     const [ numOfUses, setNumOfUses ] = useState(1)
     const [ expiryDate, setExpiryDate ] = useState("")
     const [ expiryTime, setExpiryTime ] = useState("")
@@ -9,9 +9,9 @@ export default function TokenAdder({ macros }) {
     const [ loading, setLoading ] = useState(false)
 
     useEffect(() => {
-        if (macros)
-            setSelectedMacro(macros[0] || "")
-    }, [macros])
+        if (serviceCalls)
+            setSelectedServiceCall(serviceCalls[0] || "")
+    }, [serviceCalls])
 
     const addToken = event => {
         event.preventDefault()
@@ -29,7 +29,7 @@ export default function TokenAdder({ macros }) {
         let parsedComment = comment === "" ? undefined : comment
 
         let body = {
-            "macro_name": selectedMacro,
+            "service_call_name": selectedServiceCall,
             "expires": dateTimeIso,
             "uses_max": numOfUses,
             "comment": parsedComment
@@ -46,7 +46,7 @@ export default function TokenAdder({ macros }) {
             .then(r => {
                 if (r.error) {
                     setLoading(false)
-                    alert(`An error occured white creating the macro: ${r.error || "unknown :("}`)
+                    alert(`An error occured while creating the service call: ${r.error || "unknown :("}`)
                 } else {
                     console.log(r)
                     window.location.reload()
@@ -57,21 +57,21 @@ export default function TokenAdder({ macros }) {
 
     return (
         <details>
-            <summary role="button" className="secondary">Generate a new Token</summary>
+            <summary role="button" className="secondary">Generate a new token</summary>
             <form>
                 <div className="grid">
                     <div>
                         <label>
-                            Select Macro to execute
+                            Select service call to execute
                             <select
-                                value={selectedMacro}
-                                onChange={e => setSelectedMacro(e.target.value)}
+                                value={selectedServiceCall}
+                                onChange={e => setSelectedServiceCall(e.target.value)}
                             >
-                                { macros && macros.map(macro => (
+                                { serviceCalls && serviceCalls.map(serviceCall => (
                                     <option
-                                        key={macro}
-                                        value={macro}
-                                    >{ macro } </option>
+                                        key={serviceCall}
+                                        value={serviceCall}
+                                    >{ serviceCall } </option>
                                 ))}
                             </select>
                         </label>
@@ -130,7 +130,7 @@ export default function TokenAdder({ macros }) {
                     />
                 </label>
 
-                <p><i>A token value will be automatically generated</i></p>
+                <p><i>The token value will be automatically generated</i></p>
                 
                 <button 
                     type="submit"

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import MacroManager from "./components/MacroManager";
+import ServiceCallManager from "./components/ServiceCallManager";
 import TokenManager from "./components/TokenManager";
 
 export default function App() {
-    const [ macros, setMacros ] = useState(null)
+    const [ serviceCalls, setServiceCalls ] = useState(null)
     const [ tokens, setTokens ] = useState(null)
     
     useEffect(() => {
@@ -14,10 +14,10 @@ export default function App() {
             })
             .catch(console.error)
 
-        fetch("api/internal/macros")
+        fetch("api/internal/service-calls")
             .then(r => r.json())
             .then(r => {
-                setMacros(r.response)
+                setServiceCalls(r.response)
             })
             .catch(console.error)
     }, [])
@@ -27,13 +27,13 @@ export default function App() {
             <br />
             <hgroup>
                 <h1>One Time Service</h1>
-                <h2>Internal Dashboard</h2>
+                <h2>Internal dashboard</h2>
             </hgroup>
-            <MacroManager 
-                macros={macros}
+            <ServiceCallManager 
+                serviceCalls={serviceCalls}
             />
             <TokenManager 
-                macros={macros}
+                serviceCalls={serviceCalls}
                 tokens={tokens}
             />
         </main>

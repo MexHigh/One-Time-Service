@@ -50,7 +50,7 @@ export default function TokenEntry({ token, details }) {
                 justifyContent: "space-between"
             }}>
                 <h6>
-                    { details.macro_name }{ isExpired(details) ? " (EXPIRED!)" : ""}
+                    { details.service_call_name }{ isExpired(details) ? " (EXPIRED!)" : ""}
                     { details.comment && (
                         <i> ("{ details.comment }")</i>
                     )}
