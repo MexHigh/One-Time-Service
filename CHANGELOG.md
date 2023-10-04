@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0
+
+- Renamed "marco" to "service call" for simplification (breaking change!)
+- Added multiarch support: armv7 and aarch64 (arm64) are now supported!
+- Added some smaller internal frontend improvements
+
 ## 0.2.1
 
 - Feature: Comment is now shown on the submission notification if available
