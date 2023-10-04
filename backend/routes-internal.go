@@ -15,8 +15,8 @@ type TokenDetailsWithShareURL struct {
 	ShareURL     string `json:"share_url"`
 }
 
-func handleGetMacroNames(c *gin.Context) {
-	macros, err := db.GetMacroNames()
+func handleGetServiceCallNames(c *gin.Context) {
+	serviceCalls, err := db.GetServiceCallNames()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, GenericResponse{
 			Error: err.Error(),
@@ -25,20 +25,20 @@ func handleGetMacroNames(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, GenericResponse{
-		Response: macros,
+		Response: serviceCalls,
 	})
 }
 
-func handleGetMacro(c *gin.Context) {
-	tokenParam := c.Query("name")
-	if tokenParam == "" {
+func handleGetServiceCall(c *gin.Context) {
+	serviceCallParam := c.Query("name")
+	if serviceCallParam == "" {
 		c.JSON(http.StatusBadRequest, GenericResponse{
 			Error: "name parameter is empty",
 		})
 		return
 	}
 
-	macro, err := db.GetMacro(tokenParam)
+	serviceCall, err := db.GetServiceCall(serviceCallParam)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, GenericResponse{
 			Error: err.Error(),
@@ -47,11 +47,11 @@ func handleGetMacro(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, GenericResponse{
-		Response: macro,
+		Response: serviceCall,
 	})
 }
 
-func handleCreateMacro(c *gin.Context) {
+func handleCreateServiceCall(c *gin.Context) {
 	var body struct {
 		Name                  string `json:"name" binding:"required"`
 		ServicePayloadYAMLb64 string `json:"service_payload_yaml_base64" binding:"required"`
@@ -126,7 +126,7 @@ func handleCreateMacro(c *gin.Context) {
 		Data:    sd,
 	}
 
-	if err := db.AddMacro(body.Name, sc); err != nil {
+	if err := db.AddServiceCall(body.Name, sc); err != nil {
 		c.JSON(http.StatusInternalServerError, GenericResponse{
 			Error: err.Error(),
 		})
@@ -138,17 +138,17 @@ func handleCreateMacro(c *gin.Context) {
 	})
 }
 
-func handleDeleteMacro(c *gin.Context) {
-	macroParam := c.Query("name")
-	if macroParam == "" {
+func handleDeleteServiceCall(c *gin.Context) {
+	serviceCallParam := c.Query("name")
+	if serviceCallParam == "" {
 		c.JSON(http.StatusBadRequest, GenericResponse{
 			Error: "name parameter is empty",
 		})
 		return
 	}
 
-	// first, delete all tokens using this macro
-	tokenNames, err := db.GetTokensByMacroName(macroParam)
+	// first, delete all tokens using this service call
+	tokenNames, err := db.GetTokensByServiceCallName(serviceCallParam)
 	if err != nil {
 		c.JSON(http.StatusNotFound, GenericResponse{
 			Error: err.Error(),
@@ -164,8 +164,8 @@ func handleDeleteMacro(c *gin.Context) {
 		}
 	}
 
-	// then, delete the macro itself
-	if err := db.DeleteMacro(macroParam); err != nil {
+	// then, delete the service call itself
+	if err := db.DeleteServiceCall(serviceCallParam); err != nil {
 		c.JSON(http.StatusInternalServerError, GenericResponse{
 			Error: err.Error(),
 		})
@@ -216,10 +216,10 @@ func handleGetTokensWithDetails(c *gin.Context) {
 
 func handleCreateToken(c *gin.Context) {
 	var body struct {
-		MacroName string     `json:"macro_name" binding:"required"`
-		Expires   *time.Time `json:"expires,omitempty"`
-		UsesMax   int        `json:"uses_max"`
-		Comment   *string    `json:"comment,omitempty"`
+		ServiceCallName string     `json:"service_call_name" binding:"required"`
+		Expires         *time.Time `json:"expires,omitempty"`
+		UsesMax         int        `json:"uses_max"`
+		Comment         *string    `json:"comment,omitempty"`
 	}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, GenericResponse{
@@ -228,8 +228,8 @@ func handleCreateToken(c *gin.Context) {
 		return
 	}
 
-	// check if macro exists
-	if _, err := db.GetMacro(body.MacroName); err != nil {
+	// check if service call exists
+	if _, err := db.GetServiceCall(body.ServiceCallName); err != nil {
 		c.JSON(http.StatusNotFound, GenericResponse{
 			Error: err.Error(),
 		})
@@ -255,12 +255,12 @@ func handleCreateToken(c *gin.Context) {
 	}
 
 	sc := &TokenDetails{
-		MacroName: body.MacroName,
-		Created:   &now,
-		Expires:   expires, // might be nil, but thats intended
-		UsesMax:   usagesMax,
-		UsesLeft:  usagesMax,
-		Comment:   body.Comment, // might be nil, but thats intended
+		ServiceCallName: body.ServiceCallName,
+		Created:         &now,
+		Expires:         expires, // might be nil, but thats intended
+		UsesMax:         usagesMax,
+		UsesLeft:        usagesMax,
+		Comment:         body.Comment, // might be nil, but thats intended
 	}
 
 	randString := generateRandomString(32)

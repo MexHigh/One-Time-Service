@@ -1,11 +1,11 @@
 import React, { useState } from "react"
 
-export default function MacroAdder() {
+export default function ServiceCallAdder() {
     const [ name, setName ] = useState("")
     const [ yaml, setYaml ] = useState("")
     const [ loading, setLoading ] = useState(false)
     
-    const addMacro = event => {
+    const addServiceCall = event => {
         event.preventDefault()
         setLoading(true)
 
@@ -14,7 +14,7 @@ export default function MacroAdder() {
             return false
         }
 
-        fetch("api/internal/macro", {
+        fetch("api/internal/service-call", {
             method: "POST",
             headers: {
                 "content-type": "application/json"
@@ -28,7 +28,7 @@ export default function MacroAdder() {
             .then(r => {
                 if (r.error) {
                     setLoading(false)
-                    alert(`An error occured white creating the macro: ${r.error || "unknown :("}`)
+                    alert(`An error occured white creating the service call: ${r.error || "unknown :("}`)
                 } else {
                     console.log(r)
                     window.location.reload()
@@ -39,10 +39,10 @@ export default function MacroAdder() {
 
     return (
         <details>
-            <summary role="button" className="secondary">Add a new Macro</summary>
+            <summary role="button" className="secondary">Add a new service call</summary>
             <form>
                 <label>
-                    Macro name
+                    Service call name
                     <input 
                         type="text" 
                         placeholder="E.g. 'Open front door'"
@@ -66,7 +66,7 @@ export default function MacroAdder() {
                 
                 <button 
                     type="submit"
-                    onClick={addMacro}
+                    onClick={addServiceCall}
                     aria-busy={ loading ? true : false}
                 >Create</button>
             </form>

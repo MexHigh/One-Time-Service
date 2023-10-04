@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from "react"
 
-export default function MacroModal({ open, closeCallback, macroName }) {
-    const [ macro, setMacro ] = useState(null)
+export default function ServiceCallModal({ open, closeCallback, serviceCallName }) {
+    const [ serviceCall, setServiceCall ] = useState(null)
     const [ deleteLoading, setDeleteLoading ] = useState(false)
 
     useEffect(() => {
-        if (!macroName) return
-        fetch(`api/internal/macro/details?name=${macroName}`)
+        if (!serviceCallName) return
+        fetch(`api/internal/service-call/details?name=${serviceCallName}`)
             .then(r => r.json())
             .then(r => {
-                setMacro(r.response)
+                setServiceCall(r.response)
             })
             .catch(console.error)
-    }, [macroName])
+    }, [serviceCallName])
 
-    const deleteMacro = () => {
+    const deleteServiceCall = () => {
         setDeleteLoading(true)
 
-        if (!window.confirm("Really delete macro? This will also delete all tokens associated with this macro!")) {
+        if (!window.confirm("Really delete service call? This will also delete all tokens associated with it!")) {
             setDeleteLoading(false)
             return false
         }
 
-        fetch(`api/internal/macro?name=${macroName}`, {
+        fetch(`api/internal/service-call?name=${serviceCallName}`, {
             method: "DELETE"
         })
             .then(r => r.json())
@@ -48,25 +48,25 @@ export default function MacroModal({ open, closeCallback, macroName }) {
                         onClick={e => {
                             e.preventDefault()
                             closeCallback()
-                            setMacro(null)
+                            setServiceCall(null)
                         }}
                     ></a>
-                    <span>Macro details: <strong>{ macroName }</strong></span>
+                    <span>Service call details: <strong>{ serviceCallName }</strong></span>
                 </header>
-                { macro ? (
+                { serviceCall ? (
                     <>
                         <div>
-                            <p>This macro will execute the following Home Assistant service</p>
+                            <p>This service call will execute the following Home Assistant service</p>
                             <br />
                             <pre><code>
-                                { JSON.stringify(macro, null, 4) }
+                                { JSON.stringify(serviceCall, null, 4) }
                             </code></pre>
                         </div>
                         <footer>
                             <button
                                 aria-busy={deleteLoading}
-                                onClick={deleteMacro}
-                            >Delete Macro and associated Tokens</button>
+                                onClick={deleteServiceCall}
+                            >Delete service call and associated tokens</button>
                         </footer>
                     </>
                 ) : <progress />}

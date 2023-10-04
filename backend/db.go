@@ -27,7 +27,7 @@ func NewDB(path string) *DB {
 		if err != nil {
 			panic(err)
 		}
-		os.WriteFile(path, []byte(`{ "macros": {}, "tokens": {} }`), 0644)
+		os.WriteFile(path, []byte(`{ "service_calls": {}, "tokens": {} }`), 0644)
 	}
 
 	return &DB{
@@ -95,8 +95,8 @@ func (db *DB) claim(write bool, f func(dbc *DBContent) error) error {
 }
 
 type DBContent struct {
-	Macros map[string]*ServiceCall  `json:"macros"`
-	Tokens map[string]*TokenDetails `json:"tokens"`
+	ServiceCalls map[string]*ServiceCall  `json:"service_calls"`
+	Tokens       map[string]*TokenDetails `json:"tokens"`
 }
 
 type ServiceCall struct {
@@ -105,19 +105,19 @@ type ServiceCall struct {
 }
 
 type TokenDetails struct {
-	MacroName string     `json:"macro_name"`
-	Created   *time.Time `json:"created"`
-	Expires   *time.Time `json:"expires"`
-	UsesMax   int        `json:"uses_max"`
-	UsesLeft  int        `json:"uses_left"`
-	Comment   *string    `json:"comment"`
+	ServiceCallName string     `json:"service_call_name"`
+	Created         *time.Time `json:"created"`
+	Expires         *time.Time `json:"expires"`
+	UsesMax         int        `json:"uses_max"`
+	UsesLeft        int        `json:"uses_left"`
+	Comment         *string    `json:"comment"`
 }
 
-/// MACRO FUNCTIONS ///
+/// SERVICE CALL FUNCTIONS ///
 
-func (db *DB) GetMacroNames() (out []string, err error) {
+func (db *DB) GetServiceCallNames() (out []string, err error) {
 	err = db.claim(false, func(dbc *DBContent) error {
-		for name := range dbc.Macros {
+		for name := range dbc.ServiceCalls {
 			out = append(out, name)
 		}
 		return nil
@@ -125,11 +125,11 @@ func (db *DB) GetMacroNames() (out []string, err error) {
 	return
 }
 
-func (db *DB) GetMacro(name string) (sc *ServiceCall, err error) {
+func (db *DB) GetServiceCall(name string) (sc *ServiceCall, err error) {
 	err = db.claim(false, func(dbc *DBContent) error {
-		scTemp, ok := dbc.Macros[name]
+		scTemp, ok := dbc.ServiceCalls[name]
 		if !ok {
-			return fmt.Errorf("macro '%s' does not exist", name)
+			return fmt.Errorf("service call '%s' does not exist", name)
 		}
 		sc = scTemp
 		return nil
@@ -137,17 +137,17 @@ func (db *DB) GetMacro(name string) (sc *ServiceCall, err error) {
 	return
 }
 
-func (db *DB) AddMacro(name string, sc *ServiceCall) (err error) {
+func (db *DB) AddServiceCall(name string, sc *ServiceCall) (err error) {
 	err = db.claim(true, func(dbc *DBContent) error {
-		dbc.Macros[name] = sc
+		dbc.ServiceCalls[name] = sc
 		return nil
 	})
 	return
 }
 
-func (db *DB) DeleteMacro(name string) (err error) {
+func (db *DB) DeleteServiceCall(name string) (err error) {
 	err = db.claim(true, func(dbc *DBContent) error {
-		delete(dbc.Macros, name)
+		delete(dbc.ServiceCalls, name)
 		return nil
 	})
 	return
@@ -185,10 +185,10 @@ func (db *DB) GetTokenDetails(token string) (td *TokenDetails, err error) {
 	return
 }
 
-func (db *DB) GetTokensByMacroName(macroName string) (tokenNames []string, err error) {
+func (db *DB) GetTokensByServiceCallName(serviceCallName string) (tokenNames []string, err error) {
 	err = db.claim(false, func(dbc *DBContent) error {
 		for name, details := range dbc.Tokens {
-			if details.MacroName == macroName {
+			if details.ServiceCallName == serviceCallName {
 				tokenNames = append(tokenNames, name)
 			}
 		}

@@ -2,18 +2,17 @@ import React from "react"
 import TokenAdder from "./TokenAdder"
 import TokenEntry from "./TokenEntry"
 
-export default function TokenManager({ macros, tokens }) {
+export default function TokenManager({ serviceCalls, tokens }) {
     return (
-        <>
-            <article>
-                <header>
-                    Manage <span
-                        data-tooltip="One time code that will call a Macro once executed"
-                        data-placement="right"
-                    >Tokens</span>
-                </header>
+        <article>
+            <header>
+                Manage tokens
+            </header>
+            { !serviceCalls ? (
+                <p>Please add a service call first!</p>
+            ) : (
                 <div>
-                    <TokenAdder macros={macros} />
+                    <TokenAdder serviceCalls={serviceCalls} />
                     <div>
                         { tokens && Object.entries(tokens).map(([token, details]) => (
                             <TokenEntry
@@ -24,15 +23,7 @@ export default function TokenManager({ macros, tokens }) {
                         ))}
                     </div>
                 </div>
-                {/*<footer>
-                    <button className="outline">
-                        Delete expired Tokens
-                    </button>
-                    <button className="outline">
-                        Delete all Tokens
-                    </button>
-                </footer>*/}
-            </article>
-        </>
+            )}
+        </article>
     )
 }

@@ -56,9 +56,9 @@ window.addEventListener("DOMContentLoaded", () => {
                 if (r.response.error) {
                     throw new Error("response has error: " + r.response.error)
                 }
-                let { macro_name, expires, comment, uses_max, uses_left } = r.response
+                let { service_call_name, expires, comment, uses_max, uses_left } = r.response
 
-                document.querySelector("#action-container > code").innerHTML = macro_name
+                document.querySelector("#action-container > code").innerHTML = service_call_name
 
                 if (expires) {
                     let container = document.querySelector("#expires-container")

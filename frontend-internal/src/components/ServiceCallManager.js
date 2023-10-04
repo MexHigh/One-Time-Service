@@ -1,26 +1,23 @@
 import React, { useState } from "react"
-import MacroAdder from "./MacroAdder"
-import MacroModal from "./MacroModal"
+import ServiceCallAdder from "./ServiceCallAdder"
+import ServiceCallModal from "./ServiceCallModal"
 
-export default function MacroManager({ macros }) {
+export default function ServiceCallManager({ serviceCalls }) {
     const [ modal, setModal ] = useState(null)
 
     return (
         <>
             <article>
                 <header>
-                    Manage <span 
-                        data-tooltip="Macros map a name to a HA service call"
-                        data-placement="right"
-                    >Macros</span>
+                    Manage service calls
                 </header>
                 <div>
-                    <MacroAdder />
+                    <ServiceCallAdder />
                     <div>
-                        { macros && macros.map(macro => (
+                        { serviceCalls && serviceCalls.map(serviceCall => (
                             // eslint-disable-next-line
                             <a
-                                key={macro}
+                                key={serviceCall}
                                 role="button"
                                 href=""
                                 className="outline"
@@ -30,17 +27,17 @@ export default function MacroManager({ macros }) {
                                 }}
                                 onClick={e => {
                                     e.preventDefault()
-                                    setModal(macro)
+                                    setModal(serviceCall)
                                 }}
-                            >{ macro }</a>
+                            >{ serviceCall }</a>
                         ))}
                     </div>
                 </div>
             </article>
-            <MacroModal
+            <ServiceCallModal
                 open={modal ? true : false}
                 closeCallback={() => setModal(null)}
-                macroName={modal}
+                serviceCallName={modal}
             />
         </>
     )
