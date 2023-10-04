@@ -6,7 +6,9 @@ stage: stable
 url: https://git.leon.wtf/leon/one-time-service
 arch:
   - amd64
-image: registry.git.leon.wtf/leon/one-time-service/{arch}
+  - armv7
+  - aarch64
+image: registry.git.leon.wtf/leon/one-time-service/multiarch
 
 init: false
 homeassistant_api: true
