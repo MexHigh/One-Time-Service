@@ -11,7 +11,7 @@ _Call a service with a one time token from outside Home Assistant!_
 
 ## How does it work?
 
-The Add-on exposes a separate port (on port `1337` by default) which can be used by a reverse proxy exposed to the internet. This service is used to submit the tokens from the "outside world". The add-ons admin dashboard can be used to create service calls and tokens.
+The add-on exposes a separate port (`1337` by default) which can be used by a reverse proxy exposed to the internet, while Home Assistant itself can reside behind your firewall (see examples below). This endpoint is used to submit the tokens from the "outside world". The add-ons admin dashboard is used to define service calls and to generate tokens. You can add the dashboard to your Home Assistant sidebar from the Add-on settings page.
 
 A **service call** (previously called "macros") is just a way to name a possibly complex Home Assistant service call for better reusability inside the add-on, e.g. if used in multiple tokens at once or if a token must be recreated on a regular basis.
 
@@ -34,6 +34,26 @@ Tokens an service call definitions are stored in a JSON file in `/share/one-time
 #### Public token submission page
 
 ![Public token submission](https://git.leon.wtf/leon/one-time-service/-/raw/main/screenshots/token-submission.png)
+
+## Add-on options
+
+| Option                       | Description |
+|------------------------------|-------------|
+| `public_token_base_url`      | This is the URL (or IP) exposed by the reverse proxy, that proxies requests to the submission port (default `1337`). Tokens are generated for this URL like this: `<base-url>/?token=<token>`. |
+| `notify_on_token_submission` | If enabled token submissions are logged to the notification target. |
+| `notification_target`        | The Home Assistant service to send notifications with. E.g. use `notify.notify` to send push notifications to all pushers. |  
+
+## Reverse proxy examples
+
+In these examples `10.0.30.1` is the IP of Home Assistant inside our network and `https://smart-token.example.com` is set as `public_token_base_url`. Tokens are then generated like this: `https://smart-token.example.com/?token=<token>`.
+
+**Caddy 2**
+
+```Caddyfile
+https://smart-token.example.org {
+    reverse_proxy * 10.0.30.1:1337
+}
+```
 
 ## Tech stack
 
