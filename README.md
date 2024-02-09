@@ -17,15 +17,15 @@ This button will add the add-on repository at `https://git.leon.wtf/leon/leon.wt
 
 ## How does it work?
 
-The add-on exposes a separate port (`1337` by default) which can be used by a reverse proxy exposed to the internet, while Home Assistant itself can reside behind your firewall (see examples below). This endpoint is used to submit the tokens from the "outside world". The add-ons admin dashboard is used to define service calls and to generate tokens. You can add the dashboard to your Home Assistant sidebar from the Add-on settings page.
+The add-on exposes a separate port (`1337` by default) which can be used by a reverse proxy exposed to the internet, while Home Assistant itself can reside behind your firewall (see examples below). This endpoint is used to submit the tokens from the "outside world". The add-on's admin dashboard is used to define service calls and to generate tokens. You can add the dashboard to your Home Assistant sidebar from the add-on settings page.
 
-A **service call** (previously called "macros") is just a way to name a possibly complex Home Assistant service call for better reusability inside the add-on, e.g. if used in multiple tokens at once or if a token must be recreated on a regular basis.
+A **service call** (previously called "macros") is a possibly complex Home Assistant service call used for better reusability inside the add-on, e.g. if used in multiple tokens at once or if a token must be recreated on a regular basis.
 
 A **token** is configured to execute a previously created service call and can optionally have a comment visible on the submission page and/or an expiry time.
 
 The **differences to just using vanilla webhook automations** are:
 - A webhook URL can neither expire nor be invalidated once used
-- The exidential use of a webhook URL can occur. E.g. when you call the webhook URL from a mobile browser, leave the page open, and reopen the browser later, the webhook is called again.
+- The accidential use of a webhook URL can occur. E.g. when you call the webhook URL from a mobile browser, leave the page open, and reopen the browser later, the webhook is called again.
 
 Tokens an service call definitions are stored in a JSON file in `/share/one-time-service/db.json`.
 
