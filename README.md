@@ -9,6 +9,12 @@ _Call a service with a one time token from outside Home Assistant!_
 - Allow neighbors to notifiy you of emergencies by turning a smart RGB light red
 - Let your neighbors activate your vacuum cleaner when you are on vacation
 
+## Installation
+
+[![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgit.leon.wtf%2Fleon%2Fleon.wtf-home-assistant-addons)
+
+This button will add the add-on repository at `https://git.leon.wtf/leon/leon.wtf-home-assistant-addons` to your Home Assistant. You can then install and update One Time Service via the Add-on Store.
+
 ## How does it work?
 
 The add-on exposes a separate port (`1337` by default) which can be used by a reverse proxy exposed to the internet, while Home Assistant itself can reside behind your firewall (see examples below). This endpoint is used to submit the tokens from the "outside world". The add-ons admin dashboard is used to define service calls and to generate tokens. You can add the dashboard to your Home Assistant sidebar from the Add-on settings page.
