@@ -33,7 +33,7 @@ export default function TokenEntry({ token, details }) {
     const replenishTokenUses = token => {
         setReplenishLoading(true)
 
-        if (!window.confirm("Really replenish token uses?")) {
+        if (!window.confirm(`This will set the token usage count back to ${details.uses_max}. Continue?`)) {
             setReplenishLoading(false)
             return false
         }
@@ -66,10 +66,15 @@ export default function TokenEntry({ token, details }) {
         return <span>{ splat[0] }=<wbr/>{ splat[1] }</span>
     }
 
+    const actionButtonStyle = {
+        marginLeft: "10px",
+        marginBottom: "5px",
+        padding: "5px 10px",
+        cursor: "pointer"
+    }
+
     return (                            
-        <article key={token} style={{
-            padding: "1.5em"
-        }}>
+        <article key={token} style={{ padding: "1.5em" }}>
             <div style={{
                 display: "flex",
                 justifyContent: "space-between"
@@ -85,17 +90,10 @@ export default function TokenEntry({ token, details }) {
                     justifyItems: "end",
                     alignItems: "start"
                 }}>
-                    <a 
+                    <button
                         aria-busy={ replenishLoading ? true : false }
-                        role="button"
                         className="secondary" 
-                        style={{
-                            marginLeft: "10px",
-                            marginBottom: "5px",
-                            padding: "5px 10px",
-                            cursor: "pointer"
-                        }}
-                        href=""
+                        style={actionButtonStyle}
                         onClick={e => {
                             e.preventDefault()
                             replenishTokenUses(token)
@@ -104,18 +102,11 @@ export default function TokenEntry({ token, details }) {
                         { !replenishLoading && (
                             <FontAwesomeIcon icon={faArrowTrendUp} width={22} />
                         )}
-                    </a>
-                    <a 
+                    </button>
+                    <button 
                         aria-busy={ deleteLoading ? true : false }
-                        role="button"
                         className="secondary" 
-                        style={{
-                            marginLeft: "10px",
-                            marginBottom: "5px",
-                            padding: "5px 10px",
-                            cursor: "pointer"
-                        }}
-                        href=""
+                        style={actionButtonStyle}
                         onClick={e => {
                             e.preventDefault()
                             deleteToken(token)
@@ -124,23 +115,20 @@ export default function TokenEntry({ token, details }) {
                         { !deleteLoading && (
                             <FontAwesomeIcon icon={faTrashCan} width={22} />
                         )}
-                    </a>
+                    </button>
                 </div>
             </div>
-            <figure style={{
-                marginBottom: ".1em"
-            }}>
+            <figure style={{ marginBottom: ".1em" }}>
                 <code>
                     { addPreferedLinebreakBeforeToken(details.share_url) }
                 </code>
             </figure>
-            <p style={{
-                marginBottom: "1em"
-            }}>
+            <p style={{ marginBottom: "1em" }}>
                 <small>
                     <a
                         href={ details.share_url }
                         target="_blank"
+                        rel="noreferrer"
                     >
                         Open Link
                     </a>
