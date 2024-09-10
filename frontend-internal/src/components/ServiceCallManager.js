@@ -9,7 +9,7 @@ export default function ServiceCallManager({ serviceCalls }) {
         <>
             <article>
                 <header>
-                    Manage service calls
+                    Manage actions
                 </header>
                 <div>
                     <ServiceCallAdder />

@@ -9,7 +9,7 @@ export default function TokenManager({ serviceCalls, tokens }) {
                 Manage tokens
             </header>
             { !serviceCalls ? (
-                <p>Please add a service call first!</p>
+                <p>Please add an action first!</p>
             ) : (
                 <div>
                     <TokenAdder serviceCalls={serviceCalls} />

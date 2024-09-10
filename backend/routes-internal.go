@@ -72,6 +72,8 @@ func handleCreateServiceCall(c *gin.Context) {
 	}
 
 	var scCompat struct {
+		// There are two supported ways to define a service call, we prefer "action"
+		Action  string `json:"action"`
 		Service string `json:"service"`
 		// There are two supported ways to define an entity ID in YAML
 		Target *map[string]interface{} `json:"target"` // (Prio 1) target -> entity_id [-> list element]
@@ -85,20 +87,27 @@ func handleCreateServiceCall(c *gin.Context) {
 		return
 	}
 
-	if scCompat.Service == "" {
+	// check service/service key (prefer action)
+	var service string
+	if scCompat.Action != "" {
+		service = scCompat.Action
+	} else if scCompat.Service != "" {
+		service = scCompat.Service
+	} else {
 		c.JSON(http.StatusBadRequest, GenericResponse{
-			Error: "service key cannot be empty",
+			Error: "both keys 'action' and 'service' are empty, at least one is required",
 		})
 		return
 	}
 
-	if len(strings.Split(scCompat.Service, ".")) != 2 {
+	if len(strings.Split(service, ".")) != 2 {
 		c.JSON(http.StatusBadRequest, GenericResponse{
-			Error: "service key must follow home assistant service syntax",
+			Error: "action/service key must follow home assistant action syntax",
 		})
 		return
 	}
 
+	// check target/data
 	if scCompat.Target != nil {
 		var tempNewData map[string]interface{}
 		if scCompat.Data == nil {
@@ -112,8 +121,6 @@ func handleCreateServiceCall(c *gin.Context) {
 		scCompat.Data = &tempNewData
 	}
 
-	// TODO make comments
-
 	var sd interface{}
 	if scCompat.Data == nil {
 		sd = make(map[string]interface{})
@@ -122,7 +129,7 @@ func handleCreateServiceCall(c *gin.Context) {
 	}
 
 	sc := &ServiceCall{
-		Service: scCompat.Service,
+		Service: service,
 		Data:    sd,
 	}
 

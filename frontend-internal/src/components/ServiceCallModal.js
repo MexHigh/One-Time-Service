@@ -17,7 +17,7 @@ export default function ServiceCallModal({ open, closeCallback, serviceCallName 
     const deleteServiceCall = () => {
         setDeleteLoading(true)
 
-        if (!window.confirm("Really delete service call? This will also delete all tokens associated with it!")) {
+        if (!window.confirm("Really delete this action? This will also delete all tokens associated with it!")) {
             setDeleteLoading(false)
             return false
         }
@@ -51,12 +51,12 @@ export default function ServiceCallModal({ open, closeCallback, serviceCallName 
                             setServiceCall(null)
                         }}
                     ></a>
-                    <span>Service call details: <strong>{ serviceCallName }</strong></span>
+                    <span>Action details: <strong>{ serviceCallName }</strong></span>
                 </header>
                 { serviceCall ? (
                     <>
                         <div>
-                            <p>This service call will execute the following Home Assistant service</p>
+                            <p>This action will execute the following Home Assistant action</p>
                             <br />
                             <pre><code>
                                 { JSON.stringify(serviceCall, null, 4) }
@@ -66,7 +66,7 @@ export default function ServiceCallModal({ open, closeCallback, serviceCallName 
                             <button
                                 aria-busy={deleteLoading}
                                 onClick={deleteServiceCall}
-                            >Delete service call and associated tokens</button>
+                            >Delete action and associated tokens</button>
                         </footer>
                     </>
                 ) : <progress />}
