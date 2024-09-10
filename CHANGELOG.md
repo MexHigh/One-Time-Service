@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+- Feature: Added button to replenish token usage count back to the max value
+- Fixed: Using the new "action" lingo instead of "service calls" and added compatibility for it. This change is implemented to be non-breaking!
+- Implemented some invisible best practices for web
+
 ## 0.3.0
 
 - Renamed "marco" to "service call" for simplification (breaking change!)
