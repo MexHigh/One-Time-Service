@@ -1,8 +1,10 @@
 import React, { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons"
+import { faArrowTrendUp } from "@fortawesome/free-solid-svg-icons"
 
 export default function TokenEntry({ token, details }) {
+    const [ replenishLoading, setReplenishLoading ] = useState(false)
     const [ deleteLoading, setDeleteLoading ] = useState(false)
 
     const deleteToken = token => {
@@ -20,10 +22,33 @@ export default function TokenEntry({ token, details }) {
             .then(r => {
                 setTimeout(() => {
                     window.location.reload()
-                }, 1000) // artificial delay ;)
+                }, 750) // artificial delay ;)
             })
             .catch(err => {
                 setDeleteLoading(false)
+                console.error(err)
+            })
+    }
+
+    const replenishTokenUses = token => {
+        setReplenishLoading(true)
+
+        if (!window.confirm(`This will set the token usage count back to ${details.uses_max}. Continue?`)) {
+            setReplenishLoading(false)
+            return false
+        }
+
+        fetch(`api/internal/token/replenish?token=${token}`, {
+            method: "POST"
+        })
+            .then(r => r.json())
+            .then(r => {
+                setTimeout(() => {
+                    window.location.reload()
+                }, 750) // artificial delay ;)
+            })
+            .catch(err => {
+                setReplenishLoading(false)
                 console.error(err)
             })
     }
@@ -41,54 +66,69 @@ export default function TokenEntry({ token, details }) {
         return <span>{ splat[0] }=<wbr/>{ splat[1] }</span>
     }
 
+    const actionButtonStyle = {
+        marginLeft: "10px",
+        marginBottom: "5px",
+        padding: "5px 10px",
+        cursor: "pointer"
+    }
+
     return (                            
-        <article key={token} style={{
-            padding: "1.5em"
-        }}>
+        <article key={token} style={{ padding: "1.5em" }}>
             <div style={{
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <h6>
-                    { details.service_call_name }{ isExpired(details) ? " (EXPIRED!)" : ""}
+                <h6 style={{ wordBreak: "break-word" }}>
+                    { details.service_call_name }{ isExpired(details) ? " (EXPIRED!)" : "" }
                     { details.comment && (
                         <i> ("{ details.comment }")</i>
                     )}
                 </h6>
-                <a 
-                    aria-busy={ deleteLoading ? true : false }
-                    role="button"
-                    className="secondary" 
-                    style={{
-                        alignSelf: "start",
-                        padding: "5px 12px",
-                        cursor: "pointer"
-                    }}
-                    href=""
-                    onClick={e => {
-                        e.preventDefault()
-                        deleteToken(token)
-                    }}
-                >
-                    { !deleteLoading && (
-                        <FontAwesomeIcon icon={faTrashCan} />
-                    )}
-                </a>
+                <div style={{
+                    display: "flex",
+                    justifyItems: "end",
+                    alignItems: "start"
+                }}>
+                    <button
+                        aria-busy={ replenishLoading ? true : false }
+                        className="secondary" 
+                        style={actionButtonStyle}
+                        onClick={e => {
+                            e.preventDefault()
+                            replenishTokenUses(token)
+                        }}
+                    >
+                        { !replenishLoading && (
+                            <FontAwesomeIcon icon={faArrowTrendUp} width={22} />
+                        )}
+                    </button>
+                    <button 
+                        aria-busy={ deleteLoading ? true : false }
+                        className="secondary" 
+                        style={actionButtonStyle}
+                        onClick={e => {
+                            e.preventDefault()
+                            deleteToken(token)
+                        }}
+                    >
+                        { !deleteLoading && (
+                            <FontAwesomeIcon icon={faTrashCan} width={22} />
+                        )}
+                    </button>
+                </div>
             </div>
-            <figure style={{
-                marginBottom: ".1em"
-            }}>
+            <figure style={{ marginBottom: ".1em" }}>
                 <code>
                     { addPreferedLinebreakBeforeToken(details.share_url) }
                 </code>
             </figure>
-            <p style={{
-                marginBottom: "1em"
-            }}>
+            <p style={{ marginBottom: "1em" }}>
                 <small>
                     <a
                         href={ details.share_url }
                         target="_blank"
+                        rel="noreferrer"
                     >
                         Open Link
                     </a>

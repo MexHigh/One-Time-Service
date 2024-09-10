@@ -70,8 +70,8 @@ func (db *DB) save(state *DBContent) error {
 	return nil
 }
 
-// claim aquires or waits for a lock on the DB file, reads
-// its contents and exposes it via the *DBContent fuction paramter.
+// claim aquires or waits for a lock on the DB file, reads its
+// contents and exposes it via the *DBContent function parameter.
 // Afterwrads, its flushes and closes the DB file, releasing
 // the mutex lock again.
 func (db *DB) claim(write bool, f func(dbc *DBContent) error) error {
@@ -205,6 +205,19 @@ func (db *DB) AddToken(token string, td *TokenDetails) (err error) {
 	return
 }
 
+func (db *DB) SetUseCountForToken(token string, newUseCount int) (err error) {
+	err = db.claim(true, func(dbc *DBContent) error {
+		_, ok := dbc.Tokens[token]
+		if !ok {
+			return fmt.Errorf("token '%s' does not exist", token)
+		}
+		// directly access the token to preserve references
+		dbc.Tokens[token].UsesLeft = newUseCount
+		return nil
+	})
+	return
+}
+
 func (db *DB) DecrementUseCountForToken(token string) (err error) {
 	err = db.claim(true, func(dbc *DBContent) error {
 		tempToken, ok := dbc.Tokens[token]
@@ -216,6 +229,19 @@ func (db *DB) DecrementUseCountForToken(token string) (err error) {
 		}
 		// directly access the token to preserve references
 		dbc.Tokens[token].UsesLeft -= 1
+		return nil
+	})
+	return
+}
+
+func (db *DB) ReplenishUseCountForToken(token string) (err error) {
+	err = db.claim(true, func(dbc *DBContent) error {
+		tempToken, ok := dbc.Tokens[token]
+		if !ok {
+			return fmt.Errorf("token '%s' does not exist", token)
+		}
+		// directly access the token to preserve references
+		dbc.Tokens[token].UsesLeft = tempToken.UsesMax
 		return nil
 	})
 	return

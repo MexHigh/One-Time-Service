@@ -11,6 +11,7 @@ export default function ServiceCallAdder() {
 
         if (name === "" || yaml === "") {
             alert("Name or YAML field is empty")
+            setLoading(false)
             return false
         }
 
@@ -39,10 +40,10 @@ export default function ServiceCallAdder() {
 
     return (
         <details>
-            <summary role="button" className="secondary">Add a new service call</summary>
+            <summary role="button" className="secondary">Add a new action</summary>
             <form>
                 <label>
-                    Service call name
+                    Action name
                     <input 
                         type="text" 
                         placeholder="E.g. 'Open front door'"
@@ -53,12 +54,12 @@ export default function ServiceCallAdder() {
 
                 <label>
                     <span>
-                        Service call definition in YAML <i>(<a href="/developer-tools/service" target="_blank">create one here</a>)</i>
+                        Action definition in YAML <i>(<a href="/developer-tools/action" target="_blank">create one here</a>)</i>
                     </span>
                     <textarea 
                         type="text" 
                         rows="7"
-                        placeholder="service: homeassistant.restart&#10;data: {}"
+                        placeholder="action: homeassistant.restart&#10;data: {}"
                         value={yaml}
                         onChange={event => setYaml(event.target.value)} 
                     />

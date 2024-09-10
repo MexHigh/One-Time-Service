@@ -1,7 +1,7 @@
 name: "One Time Service"
-description: "Call a service with a one time token from outside Home Assistant!"
+description: "Call actions with a one time token from outside Home Assistant!"
 slug: "one-time-service"
-version: "0.3.0"
+version: "0.4.0"
 stage: stable
 url: https://git.leon.wtf/leon/one-time-service
 arch:

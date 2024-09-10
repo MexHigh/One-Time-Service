@@ -2,14 +2,14 @@ import React from "react"
 import TokenAdder from "./TokenAdder"
 import TokenEntry from "./TokenEntry"
 
-export default function TokenManager({ serviceCalls, tokens }) {
+export default function TokenManager({ serviceCalls, tokens }) {    
     return (
         <article>
             <header>
                 Manage tokens
             </header>
             { !serviceCalls ? (
-                <p>Please add a service call first!</p>
+                <p>Please add an action first!</p>
             ) : (
                 <div>
                     <TokenAdder serviceCalls={serviceCalls} />

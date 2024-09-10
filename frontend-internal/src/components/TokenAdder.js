@@ -46,7 +46,7 @@ export default function TokenAdder({ serviceCalls }) {
             .then(r => {
                 if (r.error) {
                     setLoading(false)
-                    alert(`An error occured while creating the service call: ${r.error || "unknown :("}`)
+                    alert(`An error occured while creating the action: ${r.error || "unknown :("}`)
                 } else {
                     console.log(r)
                     window.location.reload()
@@ -62,7 +62,7 @@ export default function TokenAdder({ serviceCalls }) {
                 <div className="grid">
                     <div>
                         <label>
-                            Select service call to execute
+                            Select action to execute
                             <select
                                 value={selectedServiceCall}
                                 onChange={e => setSelectedServiceCall(e.target.value)}
