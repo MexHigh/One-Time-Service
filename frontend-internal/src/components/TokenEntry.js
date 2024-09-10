@@ -1,8 +1,10 @@
 import React, { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons"
+import { faArrowTrendUp } from "@fortawesome/free-solid-svg-icons"
 
 export default function TokenEntry({ token, details }) {
+    const [ replenishLoading, setReplenishLoading ] = useState(false)
     const [ deleteLoading, setDeleteLoading ] = useState(false)
 
     const deleteToken = token => {
@@ -28,6 +30,29 @@ export default function TokenEntry({ token, details }) {
             })
     }
 
+    const replenishTokenUses = token => {
+        setReplenishLoading(true)
+
+        if (!window.confirm("Really replenish token uses?")) {
+            setReplenishLoading(false)
+            return false
+        }
+
+        fetch(`api/internal/token/replenish?token=${token}`, {
+            method: "POST"
+        })
+            .then(r => r.json())
+            .then(r => {
+                setTimeout(() => {
+                    window.location.reload()
+                }, 1000) // artificial delay ;)
+            })
+            .catch(err => {
+                setReplenishLoading(false)
+                console.error(err)
+            })
+    }
+
     const isExpired = tokenDetails => {
         if (tokenDetails.uses_left <= 0) 
             return true
@@ -49,31 +74,58 @@ export default function TokenEntry({ token, details }) {
                 display: "flex",
                 justifyContent: "space-between"
             }}>
-                <h6>
-                    { details.service_call_name }{ isExpired(details) ? " (EXPIRED!)" : ""}
+                <h6 style={{ wordBreak: "break-word" }}>
+                    { details.service_call_name }{ isExpired(details) ? " (EXPIRED!)" : "" }
                     { details.comment && (
                         <i> ("{ details.comment }")</i>
                     )}
                 </h6>
-                <a 
-                    aria-busy={ deleteLoading ? true : false }
-                    role="button"
-                    className="secondary" 
-                    style={{
-                        alignSelf: "start",
-                        padding: "5px 12px",
-                        cursor: "pointer"
-                    }}
-                    href=""
-                    onClick={e => {
-                        e.preventDefault()
-                        deleteToken(token)
-                    }}
-                >
-                    { !deleteLoading && (
-                        <FontAwesomeIcon icon={faTrashCan} />
-                    )}
-                </a>
+                <div style={{
+                    display: "flex",
+                    justifyItems: "end",
+                    alignItems: "start"
+                }}>
+                    <a 
+                        aria-busy={ replenishLoading ? true : false }
+                        role="button"
+                        className="secondary" 
+                        style={{
+                            marginLeft: "10px",
+                            marginBottom: "5px",
+                            padding: "5px 10px",
+                            cursor: "pointer"
+                        }}
+                        href=""
+                        onClick={e => {
+                            e.preventDefault()
+                            replenishTokenUses(token)
+                        }}
+                    >
+                        { !replenishLoading && (
+                            <FontAwesomeIcon icon={faArrowTrendUp} width={22} />
+                        )}
+                    </a>
+                    <a 
+                        aria-busy={ deleteLoading ? true : false }
+                        role="button"
+                        className="secondary" 
+                        style={{
+                            marginLeft: "10px",
+                            marginBottom: "5px",
+                            padding: "5px 10px",
+                            cursor: "pointer"
+                        }}
+                        href=""
+                        onClick={e => {
+                            e.preventDefault()
+                            deleteToken(token)
+                        }}
+                    >
+                        { !deleteLoading && (
+                            <FontAwesomeIcon icon={faTrashCan} width={22} />
+                        )}
+                    </a>
+                </div>
             </div>
             <figure style={{
                 marginBottom: ".1em"

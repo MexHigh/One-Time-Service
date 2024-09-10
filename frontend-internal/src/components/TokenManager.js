@@ -2,7 +2,7 @@ import React from "react"
 import TokenAdder from "./TokenAdder"
 import TokenEntry from "./TokenEntry"
 
-export default function TokenManager({ serviceCalls, tokens }) {
+export default function TokenManager({ serviceCalls, tokens }) {    
     return (
         <article>
             <header>

@@ -31,7 +31,7 @@ func main() {
 	db = NewDB(*dbPath)
 
 	if *corsAllowDebug || *mockOptionsJson {
-		log.Println("[WARNING] One of -cors-allow-debug or -mock-options-json was set! This prevents Gin from using Release mode!")
+		log.Println("[WARNING] One of -cors-allow-all or -mock-options-json was set! This prevents Gin from using Release mode!")
 	} else {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -57,6 +57,7 @@ func main() {
 	internalRouterApi.GET("/tokens/details", handleGetTokensWithDetails)
 	internalRouterApi.GET("/token/details", getTokenDetails) // generic route implementation
 	internalRouterApi.POST("/token", handleCreateToken)
+	internalRouterApi.POST("/token/replenish", handleReplenishToken)
 	internalRouterApi.DELETE("/token", handleDeleteToken)
 
 	go internalRouter.Run(":8099")

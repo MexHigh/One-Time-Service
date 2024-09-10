@@ -277,6 +277,27 @@ func handleCreateToken(c *gin.Context) {
 	})
 }
 
+func handleReplenishToken(c *gin.Context) {
+	tokenParam := c.Query("token")
+	if tokenParam == "" {
+		c.JSON(http.StatusBadRequest, GenericResponse{
+			Error: "token parameter is empty",
+		})
+		return
+	}
+
+	if err := db.ReplenishUseCountForToken(tokenParam); err != nil {
+		c.JSON(http.StatusInternalServerError, GenericResponse{
+			Error: err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, GenericResponse{
+		Response: "Replenished",
+	})
+}
+
 func handleDeleteToken(c *gin.Context) {
 	tokenParam := c.Query("token")
 	if tokenParam == "" {
