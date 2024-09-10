@@ -14,9 +14,12 @@ check_version:
 
 docker_buildx:
   stage: build_push
-  image: docker:dind
   rules:
     - if: $CI_COMMIT_TAG
+  tags:
+    - docker
+    - real-dind
+  image: docker:cli
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker buildx create --name one-time-service-builder --use --bootstrap --driver docker-container
@@ -24,7 +27,7 @@ docker_buildx:
     - docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --build-arg ADDON_VERSION=${CI_COMMIT_TAG} -t ${CI_REGISTRY_IMAGE}/multiarch:${CI_COMMIT_TAG} --push --provenance false .
   after_script:
     - docker buildx rm one-time-service-builder
-  
+
 #docker_homeassistant_builder:
 #  stage: build
 #  image: homeassistant/amd64-builder
