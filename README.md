@@ -19,7 +19,7 @@ This button will add the add-on repository at `https://git.leon.wtf/leon/leon.wt
 
 The add-on exposes a separate port (`1337` by default) which can be used by a reverse proxy exposed to the internet, while Home Assistant itself can reside behind your firewall (see examples below). This endpoint is used to submit the tokens from the "outside world". The add-on's admin dashboard is used to define actions and to generate tokens. You can add the dashboard to your Home Assistant sidebar from the add-on settings page.
 
-A **action** (previously called "macros" and "service calls") is a possibly complex Home Assistant action used for better reusability inside the add-on, e.g. if used in multiple tokens at once or if a token must be recreated on a regular basis.
+An **action** (previously called "macros" and "service calls") is a possibly complex Home Assistant action used for better reusability inside the add-on, e.g. if used in multiple tokens at once or if a token must be recreated on a regular basis.
 
 A **token** is configured to execute a previously created action and can optionally have a comment visible on the submission page and/or an expiry time.
 
