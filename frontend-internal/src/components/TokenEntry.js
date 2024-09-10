@@ -22,7 +22,7 @@ export default function TokenEntry({ token, details }) {
             .then(r => {
                 setTimeout(() => {
                     window.location.reload()
-                }, 1000) // artificial delay ;)
+                }, 750) // artificial delay ;)
             })
             .catch(err => {
                 setDeleteLoading(false)
@@ -45,7 +45,7 @@ export default function TokenEntry({ token, details }) {
             .then(r => {
                 setTimeout(() => {
                     window.location.reload()
-                }, 1000) // artificial delay ;)
+                }, 750) // artificial delay ;)
             })
             .catch(err => {
                 setReplenishLoading(false)
