@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.0
+
+- Improvement: Added PWA definition and favicon for public frontend
+
 ## 0.4.0
 
 - Feature: Added button to replenish token usage count back to the max value
