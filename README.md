@@ -11,9 +11,9 @@ _Call an action with a one time token from outside Home Assistant!_
 
 ## Installation
 
-[![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgit.leon.wtf%2Fleon%2Fleon.wtf-home-assistant-addons)
+[![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fcode.leon.wtf%2Fleon%2Fleon.wtf-home-assistant-addons)
 
-This button will add the add-on repository at `https://git.leon.wtf/leon/leon.wtf-home-assistant-addons` to your Home Assistant. You can then install and update One Time Service via the Add-on Store.
+This button will add the add-on repository at `https://code.leon.wtf/leon/leon.wtf-home-assistant-addons` to your Home Assistant. You can then install and update One Time Service via the Add-on Store.
 
 ## How does it work?
 
@@ -31,15 +31,15 @@ Tokens and action definitions are stored in a JSON file in `/share/one-time-serv
 
 #### Define a new action
 
-![Action creation](https://git.leon.wtf/leon/one-time-service/-/raw/main/screenshots/macro-creation.png)
+![Action creation](https://code.leon.wtf/leon/one-time-service/raw/branch/main/screenshots/macro-creation.png)
 
 #### Create a token from an action
 
-![Token creation](https://git.leon.wtf/leon/one-time-service/-/raw/main/screenshots/token-creation.png)
+![Token creation](https://code.leon.wtf/leon/one-time-service/raw/branch/main/screenshots/token-creation.png)
 
 #### Public token submission page
 
-![Public token submission](https://git.leon.wtf/leon/one-time-service/-/raw/main/screenshots/token-submission.png)
+![Public token submission](https://code.leon.wtf/leon/one-time-service/raw/branch/main/screenshots/token-submission.png)
 
 ## Add-on options
 

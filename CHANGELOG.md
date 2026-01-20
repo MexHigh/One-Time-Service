@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.1
+
+- Migrated repository to from https://git.leon.wtf/leon/one-time-service to https://code.leon.wtf/leon/one-time-service
+- Migration of Gitlab CI/CD to Forgejo Actions
+
 ## 0.5.0
 
 - Improvement: Added PWA definition and favicon for public frontend

@@ -1,0 +1,33 @@
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - ^\d+\.\d+\.\d+$ # semver without the prefix 'v'
+
+env:
+  IMAGE_SLUG: ${{ vars.FORGEJO_HOST }}/${{ forgejo.repository }}/multiarch
+
+jobs:
+  check-version:
+    runs-on: alpine-node-lts
+    steps:
+      - uses: actions/checkout@v6
+      - run: apk add yq
+      - run: ./check_version_and_changelog.sh ${{ forgejo.ref_name }}
+
+  docker-buildx-multiarch:
+    runs-on: docker
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/docker-setup-buildx-action@v3
+      - uses: actions/docker-login-action@v3
+        with:
+          registry: ${{ vars.FORGEJO_HOST }}
+          username: ${{ forgejo.actor }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
+      - uses: actions/docker-build-push-action@v6
+        with:
+          tags: ${{ env.IMAGE_SLUG }}:${{ forgejo.ref_name }}
+          build-args: ADDON_VERSION=${{ forgejo.ref_name }}
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          push: true

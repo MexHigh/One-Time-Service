@@ -1,7 +1,7 @@
 #!/bin/bash
 
 VERSION="${1:-dev}"
-IMAGE_URL="registry.git.leon.wtf/leon/one-time-service/amd64"
+IMAGE_URL="code.leon.wtf/leon/one-time-service/amd64"
 
 echo "[*] Building image with tag: $IMAGE_URL:$VERSION"
 
